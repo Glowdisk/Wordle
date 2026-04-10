@@ -42,7 +42,7 @@ public class Wordle
     /* Sets correctWord to a word randomly choosen from the dictionary */
     public void setCorrectWord()
     {
-        correctWord =  dictionaryArray[rand.nextInt(dictionaryArray.length)];
+        correctWord =  dictionaryArray[ (int) Math.Random() * 1484);
         System.out.println("The correct word is: " + correctWord);
 
     }
@@ -78,6 +78,8 @@ public class Wordle
     public void enterAction(String guess)
     {
         guess = guess.toLowerCase();
+
+        boolean[] used = new boolean[dictionaryArray.length];
 
 
         if (guess.equals(correctWord)) {

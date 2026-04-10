@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'application'  // To make your project executable
+}
+
+group = 'com.example'  // Your project's group name
+version = '1.0-SNAPSHOT'  // Your version
+
+repositories {
+    mavenCentral()  // To access dependencies (like libraries)
+}
+
+dependencies {
+    // Add your dependencies here if needed
+}
+
+application {
+    // Specify your main class (entry point)
+    mainClass = 'Wordle'  // Adjust if needed with the full package name if you're using packages
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'Wordle'  // Ensure this matches your main class name
+        )
+    }
+}
