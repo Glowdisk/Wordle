@@ -94,7 +94,7 @@ public class Wordle
         }
 
         if (guessAlreadyGuessed(guess)) {
-            wordleGame.showMessage("You already guessed!");
+            wordleGame.showMessage("You already guessed that word!");
         }
 
         else if (isInDictionary(guess)){
