@@ -29,6 +29,8 @@ public class Wordle
     Random rand = new Random();
 
     private int currentRow = 0;
+    private int guessAmount = 0;
+
 
     private boolean isCorrectWord = false;
 
@@ -76,12 +78,12 @@ public class Wordle
     public void enterAction(String guess)
     {
         guess = guess.toLowerCase();
-//        wordleGame.setSquareColor(0, 0, WordleGWindow.CORRECT_COLOR);
 
         if (guess.equals(correctWord)) {
-            wordleGame.setSquareColor(currentRow, WordleGWindow.N_COLS - 1, WordleGWindow.CORRECT_COLOR);
-
-            wordleGame.setCurrentRow(currentRow);
+            for (int i = 0; i < correctWord.length(); i++) {
+                wordleGame.setSquareColor(currentRow, i, WordleGWindow.CORRECT_COLOR);
+            }
+            guessAmount++;
             isCorrectWord = true;
             wordleGame.showMessage("You win!");
             logToGoogleSheetsWordle();
@@ -98,9 +100,10 @@ public class Wordle
         }
 
         else if (isInDictionary(guess)){
+            guessAmount++;
             for (int i = 0; i < correctWord.length(); i++) {
                 if (correctWord.charAt(i) == guess.charAt(i)){
-                    wordleGame.setSquareColor(currentRow, i , WordleGWindow.CORRECT_COLOR);
+                    wordleGame.setSquareColor(getCurrentRow(), i , WordleGWindow.CORRECT_COLOR);
                 }
                 else if (correctWord.indexOf(guess.charAt(i)) != -1) {
                     wordleGame.setSquareColor(getCurrentRow(), i, WordleGWindow.PRESENT_COLOR);
@@ -136,7 +139,8 @@ public class Wordle
         new Thread(() -> {
             String baseURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfqSxwtfQN7qTn9eQPPBdZgm-6lZ8enkt80CyFSgBLHkoe9tw/formResponse";
             String data = log("entry.1170557279=", correctWord) +
-                    log("entry.1723373179=", String.valueOf(isCorrectWord));
+                    log("&entry.1723373179=", String.valueOf(isCorrectWord)) +
+                    log("&entry.740471511=", String.valueOf(guessAmount));
 
             HttpURLConnection conn = null;
             try {
@@ -226,7 +230,7 @@ public class Wordle
                 response.append(inputLine);
             }
             String responseString = response.toString();
-            System.out.println(responseString);
+//            System.out.println(responseString);
 
             String city = responseString.replaceAll(".*\"city\":\"([^\"]+)\".*", "$1");
             String region = responseString.replaceAll(".*\"regionName\":\"([^\"]+)\".*", "$1");
