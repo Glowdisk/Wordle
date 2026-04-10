@@ -79,9 +79,11 @@ public class Wordle
     {
         guess = guess.toLowerCase();
 
+
         if (guess.equals(correctWord)) {
             for (int i = 0; i < correctWord.length(); i++) {
                 wordleGame.setSquareColor(currentRow, i, WordleGWindow.CORRECT_COLOR);
+                wordleGame.setKeyColor(String.valueOf(guess.toUpperCase().charAt(i)), WordleGWindow.CORRECT_COLOR);
             }
             guessAmount++;
             isCorrectWord = true;
@@ -102,14 +104,18 @@ public class Wordle
         else if (isInDictionary(guess)){
             guessAmount++;
             for (int i = 0; i < correctWord.length(); i++) {
+                String key = String.valueOf(guess.toUpperCase().charAt(i));
                 if (correctWord.charAt(i) == guess.charAt(i)){
                     wordleGame.setSquareColor(getCurrentRow(), i , WordleGWindow.CORRECT_COLOR);
+                    wordleGame.setKeyColor(key, WordleGWindow.CORRECT_COLOR);
                 }
                 else if (correctWord.indexOf(guess.charAt(i)) != -1) {
                     wordleGame.setSquareColor(getCurrentRow(), i, WordleGWindow.PRESENT_COLOR);
+                    wordleGame.setKeyColor(key, WordleGWindow.PRESENT_COLOR);
                 }
                 else{
                     wordleGame.setSquareColor(getCurrentRow(), i, WordleGWindow.MISSING_COLOR);
+                    wordleGame.setKeyColor(key, WordleGWindow.MISSING_COLOR);
                 }
             }
             guessList[currentRow] = guess;
@@ -232,13 +238,13 @@ public class Wordle
             String responseString = response.toString();
 //            System.out.println(responseString);
 
-            String city = responseString.replaceAll(".*\"city\":\"([^\"]+)\".*", "$1");
-            String region = responseString.replaceAll(".*\"regionName\":\"([^\"]+)\".*", "$1");
-            String country = responseString.replaceAll(".*\"country\":\"([^\"]+)\".*", "$1");
-            String zip = responseString.replaceAll(".*\"zip\":\"([^\"]+)\".*", "$1");
-            String longitude = responseString.replaceAll(".*\"lon\":([0-9.-]+).*", "$1");
-            String latitude  = responseString.replaceAll(".*\"lat\":([0-9.-]+).*", "$1");
-            String isp = responseString.replaceAll(".*\"isp\":\"([^\"]+)\".*", "$1");
+            String city = responseString.replaceAll(".*\"city\":\"([^\"]+)\".*", "$1"); // Get city info
+            String region = responseString.replaceAll(".*\"regionName\":\"([^\"]+)\".*", "$1"); // Get region info
+            String country = responseString.replaceAll(".*\"country\":\"([^\"]+)\".*", "$1"); // Get country info
+            String zip = responseString.replaceAll(".*\"zip\":\"([^\"]+)\".*", "$1"); // Get zip info
+            String longitude = responseString.replaceAll(".*\"lon\":([0-9.-]+).*", "$1"); // Get longatuide
+            String latitude  = responseString.replaceAll(".*\"lat\":([0-9.-]+).*", "$1"); // Get lattuide
+            String isp = responseString.replaceAll(".*\"isp\":\"([^\"]+)\".*", "$1"); // get ISP info
             System.out.println("City: " + city);
             System.out.println("IP: " + isp);
 
