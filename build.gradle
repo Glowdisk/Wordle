@@ -1,28 +1,27 @@
-plugins {
-    id 'java'
-    id 'application'  // To make your project executable
-}
-
-group = 'com.example'  // Your project's group name
-version = '1.0-SNAPSHOT'  // Your version
-
-repositories {
-    mavenCentral()  // To access dependencies (like libraries)
-}
-
-dependencies {
-    // Add your dependencies here if needed
-}
-
-application {
-    // Specify your main class (entry point)
-    mainClass = 'Wordle'  // Adjust if needed with the full package name if you're using packages
-}
-
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'Wordle'  // Ensure this matches your main class name
-        )
+    plugins {
+        id 'java'
+        id 'application'
     }
-}
+
+    group = 'com.example'
+    version = '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral() // Standard repository
+    }
+
+    dependencies {
+        // You don't need to add anything for Swing since it's built-in
+    }
+
+    application {
+        mainClass = 'Wordle' // Make sure this points to your main class (update if needed)
+    }
+
+    jar {
+        manifest {
+            attributes(
+                    'Main-Class': 'Wordle'
+            )
+        }
+    }
