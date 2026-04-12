@@ -7,20 +7,15 @@
 
 package UIFiles;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JFrame;
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This class implements graphics for the Wordle assignment.
@@ -43,6 +38,9 @@ public class WordleGWindow {
 /** The color used for letters that are missing (a medium gray). */
     public static final Color MISSING_COLOR = new Color(0x999999);
 
+/** Creates image of the desktop icon. */
+    Image desktopIcon = new ImageIcon(Objects.requireNonNull(WordleGWindow.class.getResource("Wordle_Logo.svg.png"))).getImage();
+
 /**
  * Creates a new WordleGWindow object and displays it on the screen.
  */
@@ -52,6 +50,7 @@ public class WordleGWindow {
         frame.setBackground(Color.WHITE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        frame.setIconImage(desktopIcon);
         canvas = new WordleCanvas();
         frame.setResizable(true);
         frame.add(canvas, BorderLayout.CENTER);
@@ -331,8 +330,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
 
 /**
  * Gets the current row number.
- *
- * @param row The row number
+ * // @param row The row number
  */
 
     public int getCurrentRow() {
