@@ -37,10 +37,8 @@ public class Wordle
     String correctWord;
 
     /* Sets correctWord to a word randomly choosen from the dictionary */
-    public void setCorrectWord()
-    {
-        correctWord = dictionaryArray[(int)(Math.random() * dictionaryArray.length)];
-
+    public void setCorrectWord() {
+        correctWord = dictionaryArray[(int) (Math.random() * dictionaryArray.length)];
     }
 
     /* Send in a guess and this returns if that guess is in the dictionary. You will call this method in enterAction */
@@ -73,16 +71,21 @@ public class Wordle
 
     public void enterAction(String guess)
     {
+
+        boolean[] guessUsed = new boolean[5];
+        boolean[] correctUsed = new boolean[5];
+
         guess = guess.toLowerCase();
 
-        boolean[] used = new boolean[dictionaryArray.length];
-
+        boolean found;
 
         if (guess.equals(correctWord)) {
+
             for (int i = 0; i < correctWord.length(); i++) {
                 wordleGame.setSquareColor(currentRow, i, WordleGWindow.CORRECT_COLOR);
                 wordleGame.setKeyColor(String.valueOf(guess.toUpperCase().charAt(i)), WordleGWindow.CORRECT_COLOR);
             }
+
             guessAmount++;
             isCorrectWord = true;
             wordleGame.showMessage("You win!");
@@ -93,32 +96,55 @@ public class Wordle
 
         if (guess.length() < 5) {
             wordleGame.showMessage("Your guess is too short!");
+            return;
         }
 
         if (guessAlreadyGuessed(guess)) {
             wordleGame.showMessage("You already guessed that word!");
+            return;
         }
 
-        else if (isInDictionary(guess)){
+        else if (isInDictionary(guess)) {
+
             guessAmount++;
             for (int i = 0; i < correctWord.length(); i++) {
                 String key = String.valueOf(guess.toUpperCase().charAt(i));
-                if (correctWord.charAt(i) == guess.charAt(i)){
-                    wordleGame.setSquareColor(getCurrentRow(), i , WordleGWindow.CORRECT_COLOR);
+
+                if (!correctUsed[i] && guess.charAt(i) == correctWord.charAt(i)) {
+                    wordleGame.setSquareColor(currentRow, i, WordleGWindow.CORRECT_COLOR);
                     wordleGame.setKeyColor(key, WordleGWindow.CORRECT_COLOR);
+                    correctUsed[i] = true;
+                    guessUsed[i] = true;
                 }
-                else if (correctWord.indexOf(guess.charAt(i)) != -1) {
-                    wordleGame.setSquareColor(getCurrentRow(), i, WordleGWindow.PRESENT_COLOR);
-                    wordleGame.setKeyColor(key, WordleGWindow.PRESENT_COLOR);
+            }
+
+            for (int j = 0; j < correctWord.length(); j++) {
+                String key = String.valueOf(guess.toUpperCase().charAt(j));
+                found = false;
+                if (!guessUsed[j]) {
+
+                    for (int k = 0; k < 5; k++) {
+                        if (!correctUsed[k] && guess.charAt(j) == correctWord.charAt(k) && !found) {
+                            correctUsed[k] = true;
+                            found = true;
+                        }
+                    }
+                    if (found) {
+                        wordleGame.setSquareColor(currentRow, j, WordleGWindow.PRESENT_COLOR);
+                        wordleGame.setKeyColor(key, WordleGWindow.PRESENT_COLOR);
+                    } else {
+                        wordleGame.setSquareColor(currentRow, j, WordleGWindow.MISSING_COLOR);
+                        wordleGame.setKeyColor(key, WordleGWindow.MISSING_COLOR);
+                    }
                 }
-                else{
-                    wordleGame.setSquareColor(getCurrentRow(), i, WordleGWindow.MISSING_COLOR);
-                    wordleGame.setKeyColor(key, WordleGWindow.MISSING_COLOR);
-                }
+
             }
             guessList[currentRow] = guess;
             currentRow++;
         }
+
+
+
         else{
             wordleGame.showMessage("Word is not the Dictionary!");
         }
@@ -126,6 +152,7 @@ public class Wordle
         if (currentRow < 6) {
             wordleGame.setCurrentRow(currentRow);
         }
+
         else{
             wordleGame.showMessage("Game Over! The word is: " + correctWord);
             wordleGame.setGameState(false);
@@ -133,6 +160,7 @@ public class Wordle
         }
 
     }
+
 
     private String log(String link, String value) {
         return link + URLEncoder.encode(value, StandardCharsets.UTF_8);
