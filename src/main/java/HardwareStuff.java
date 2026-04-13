@@ -6,19 +6,21 @@ import oshi.hardware.GraphicsCard;
 import oshi.hardware.ComputerSystem;
 import oshi.hardware.Baseboard; // Motherboard
 import oshi.hardware.UsbDevice;
+import oshi.hardware.Display;
+import oshi.hardware.Firmware;
 
 import java.util.List;
 
 
 public class HardwareStuff {
     private final SystemInfo system;
-    private final HardwareAbstractionLayer hardware;
+    private HardwareAbstractionLayer hardware;
     private final ComputerSystem computerSystem;
 
-    public HardwareStuff(SystemInfo system, HardwareAbstractionLayer hardware, ComputerSystem computerSystem){
+    public HardwareStuff(SystemInfo system, HardwareAbstractionLayer hardware){
         this.system = system;
-        this.hardware = hardware;
-        this.computerSystem = computerSystem;
+        this.hardware = system.getHardware();
+        this.computerSystem = hardware.getComputerSystem();
     }
 
 
