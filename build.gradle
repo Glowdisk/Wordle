@@ -11,7 +11,7 @@
     }
 
     dependencies {
-        // You don't need to add anything for Swing since it's built-in
+        implementation 'com.github.oshi:oshi-core:6.6.1'
     }
 
     application {

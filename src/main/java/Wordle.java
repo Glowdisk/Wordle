@@ -17,8 +17,12 @@ import java.io.InputStreamReader;
 
 import java.nio.charset.StandardCharsets;
 
+import oshi.SystemInfo;
+import oshi.hardware.HardwareAbstractionLayer;
+
 public class Wordle
 {
+
     private WordleGWindow wordleGame;
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
     String[] guessList = new String[6];
@@ -308,6 +312,7 @@ public class Wordle
 
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
+        wordleGame.showMessage("This game logs anonymous stats (TOS 4 more info)");
     }
 
     public static void main(String[] args)
