@@ -315,6 +315,7 @@ public class Wordle
         hardwareStuff.getMotherboardInfo();
         hardwareStuff.getDisplayInfo();
         hardwareStuff.getStorageInfo();
+        hardwareStuff.getSystemInfo();
 
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation

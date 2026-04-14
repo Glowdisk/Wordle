@@ -2,23 +2,20 @@ import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.util.EdidUtil;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
-
-
 
 
 public class HardwareStuff {
     private final SystemInfo system;
     private final HardwareAbstractionLayer hardware;
-    private final ComputerSystem computerSystem;
     private final long byteNum = 1024L * 1024L * 1024L;
     private final double cmToInchOffset = 2.54;
 
     public HardwareStuff(){
         this.system = new SystemInfo();
         this.hardware = system.getHardware();
-        this.computerSystem = hardware.getComputerSystem();
     }
 
 
@@ -102,11 +99,12 @@ public class HardwareStuff {
             chipBrand = stick.getManufacturer();   // e.g. "Samsung", "Micron", "Kingston"
             memoryType = stick.getMemoryType();     // e.g. "DDR4", "DDR5", "LPDDR5"
             ramPartNumber = stick.getPartNumber();     // Part number e.g. "M471A2K43CB1-CTD"// Serial number of that specific stick
-            realCapacity /=  byteNum;
+
 
 
         }
 
+        realCapacity /=  byteNum;
         long systemRamCapacity = ram.getTotal() / byteNum;
         long availableRam = ram.getAvailable() / byteNum;
         long usedRam = systemRamCapacity - availableRam;
@@ -143,17 +141,20 @@ public class HardwareStuff {
     }
 
     public void getDisplayInfo() {
+        GraphicsDevice[] devices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+
+        int refreshRate = 0;
+
         List <Display> displays = hardware.getDisplays();
 
         String monitorReleaseDate = null;
-        String resolution = null;
+        String physicalDimensions = null;
         String manufacturer = null;
         String productID = null;
 
         String screenSize = null;
 
-        for (int i = 0; i < displays.size(); i++) {
-            Display display = displays.get(i);
+        for (Display display : displays) {
             byte[] displayInfo = display.getEdid();
             double width = (EdidUtil.getHcm(displayInfo) / cmToInchOffset);
             double height = (EdidUtil.getVcm(displayInfo) / cmToInchOffset);
@@ -162,21 +163,34 @@ public class HardwareStuff {
             System.out.println(height);
 
             monitorReleaseDate = "Manufactured week " + EdidUtil.getWeek(displayInfo) + " of " + EdidUtil.getYear(displayInfo);
-            resolution = Math.round(width) + "x" + Math.round(height);
+            physicalDimensions = Math.round(width) + "x" + Math.round(height);
             manufacturer = EdidUtil.getManufacturerID(displayInfo);
             productID = EdidUtil.getProductID(displayInfo);
 
-            screenSize = (String.format("%.2f", Math.sqrt(Math.pow(width,2) + Math.pow(height,2))));
+            screenSize = (String.format("%.2f", Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))));
 
             System.out.println("-------------------------------------------------------------");
 
             System.out.println("Release date: " + monitorReleaseDate);
-            System.out.println("Resolution: " + resolution);
+            System.out.println("Resolution: " + physicalDimensions);
             System.out.println("Manufacturer: " + manufacturer);
             System.out.println("productID: " + productID);
-            System.out.println("Screen size: "+ screenSize);
+            System.out.println("Screen size: " + screenSize);
 
 
+        }
+
+        for (GraphicsDevice device : devices) {
+            if (device.getDisplayMode() != null) {
+                refreshRate = device.getDisplayMode().getRefreshRate();
+                int heightResolution = device.getDisplayMode().getHeight();
+                int widthResolution = device.getDisplayMode().getWidth();
+                String resolution = heightResolution + "x" + widthResolution;
+
+                System.out.println("Resolution: " + resolution);
+                System.out.println("Refresh rate: " + refreshRate +"hz");
+
+            }
         }
 
 
@@ -220,6 +234,17 @@ public class HardwareStuff {
 
     public void getSystemInfo() {
         ComputerSystem pc = hardware.getComputerSystem();
+
+        String manufacturer = pc.getManufacturer();
+        String model = pc.getModel();
+        String serial = pc.getSerialNumber();
+        String uuid = pc.getHardwareUUID();
+
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("Manufacturer: " + manufacturer);
+        System.out.println("Model: " + model);
+        System.out.println("UUID: " + uuid);
+        System.out.println("Serial: " + serial);
     }
 
     public void getPSUInfo() {
