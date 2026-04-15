@@ -4,10 +4,11 @@ import oshi.software.os.OSFileStore;
 import oshi.util.EdidUtil;
 
 import java.awt.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.lang.String.format;
 
 
 public class HardwareStuff {
@@ -22,7 +23,7 @@ public class HardwareStuff {
     }
 
 
-    public void getCPUInfo() {
+    public String[] getCPUInfo() {
         CentralProcessor cpu = hardware.getProcessor();
 
 
@@ -43,21 +44,22 @@ public class HardwareStuff {
         double load = cpu.getSystemCpuLoad(1000) * 100;
 
 
-        System.out.println("-------------------------------------------------------------");
-        System.out.println("CPU MODEL: " + cpuModel);
-        System.out.println("Cpu Family: " + cpuFamily);
-        System.out.println("Cpu name: " + cpuName);
-        System.out.println("AMD OR INTEL : " + cpuVendor);
-        System.out.println("Cpu Architecture: " + cpuArchitecture);
-        System.out.println("64 bit?: " + cpu64bit);
-        System.out.println("Logical cores: " + logicalCores);
-        System.out.println("Physical cores: " + physicalCores);
-        System.out.println("Load: " + load);
-
+        return new String[]{
+                "Model: " + cpuModel,
+                "Family: " + cpuFamily,
+                "CPU: " + cpuName,
+                "Vendor: " + cpuVendor,
+                "Arch: " + cpuArchitecture,
+                "64-bit: " + cpu64bit,
+                "Logical Cores: " + logicalCores,
+                "Physical Cores: " + physicalCores,
+                "Load: " + format("%.2f%%", load)
+        };
     }
 
-    public void getGPUInfo() {
+    public String[] getGPUInfo() {
         List <GraphicsCard> gpus = hardware.getGraphicsCards();
+        List<String> gpuData = new ArrayList<>();
 
         String gpuName;
         String gpuVendor;
@@ -75,25 +77,26 @@ public class HardwareStuff {
 
             realVram = String.valueOf(Math.round((double) vram / byteNum));
 
-            System.out.println("-------------------------------------------------------------");
-            System.out.println("GPU name: " + gpuName);
-            System.out.println("GPU vendor: " + gpuVendor);
-            System.out.println("gpuID: " + gpuID);
-            System.out.println("gpu vram: " + realVram);
-            System.out.println("gpu versionInfo: " + versionInfo);
+            gpuData.add("GPU name: " + gpuName);
+            gpuData.add("GPU vendor: " + gpuVendor);
+            gpuData.add("gpuID: " + gpuID);
+            gpuData.add("gpu vram: " + realVram);
+            gpuData.add("gpu versionInfo: " + versionInfo);
 
         }
+        return gpuData.toArray(new String[0]);
     }
 
-    public void getRamInfo() {
+    public String[] getRamInfo() {
         GlobalMemory ram = hardware.getMemory();
+        List <String> ramData = new ArrayList<>();
 
         long realCapacity = 0;
         long ramMhz = 0;
         String chipBrand = null;
         String memoryType = null;
         String ramPartNumber = null;
-        String stickSlot;
+        String stickSlot= null;
 
         for (PhysicalMemory stick : ram.getPhysicalMemory()) {
             realCapacity += stick.getCapacity();
@@ -103,8 +106,6 @@ public class HardwareStuff {
             ramPartNumber = stick.getPartNumber();     // Part number e.g. "M471A2K43CB1-CTD"// Serial number of that specific stick
             stickSlot = stick.getBankLabel();
 
-
-
         }
 
         realCapacity /=  byteNum;
@@ -113,21 +114,23 @@ public class HardwareStuff {
         long usedRam = systemRamCapacity - availableRam;
         String ramAmount = String.valueOf(ram.getPhysicalMemory().size());
 
-        System.out.println("-------------------------------------------------------------");
-        System.out.println("Ram size: " + realCapacity);
-        System.out.println("System ram capacity: " + systemRamCapacity);
-        System.out.println("Available Ram: " + availableRam);
-        System.out.println("Used ram: " + usedRam);
-        System.out.println("ram MHZ: " + ramMhz);
-        System.out.println("Sticks found: " + ramAmount);
-        System.out.println("Chip brand: " + chipBrand);
-        System.out.println("Memory type: " + memoryType);
-        System.out.println("Ram part number: " + ramPartNumber);
 
 
+        ramData.add("Ram size: " + realCapacity);
+        ramData.add("System ram capacity: " + systemRamCapacity);
+        ramData.add("Available Ram: " + availableRam);
+        ramData.add("Used ram: " + usedRam);
+        ramData.add("ram MHZ: " + ramMhz);
+        ramData.add("Sticks found: " + ramAmount);
+        ramData.add("Chip brand: " + chipBrand);
+        ramData.add("Memory type: " + memoryType);
+        ramData.add("Ram part number: " + ramPartNumber);
+        ramData.add("Stick slot: " + stickSlot);
+
+        return ramData.toArray(new String[0]);
     }
 
-    public void getMotherboardInfo() {
+    public String[] getMotherboardInfo() {
         Baseboard motherboard = hardware.getComputerSystem().getBaseboard();
 
         String motherboardOEM = motherboard.getManufacturer();
@@ -135,16 +138,18 @@ public class HardwareStuff {
         String motherboardSerialNumber = motherboard.getSerialNumber();
         String motherboardVersion = motherboard.getVersion();
 
-        System.out.println("-------------------------------------------------------------");
-        System.out.println("OEM: " + motherboardOEM);
-        System.out.println("Model: " + motherboardModel);
-        System.out.println("Serial: " + motherboardSerialNumber);
-        System.out.println("Version: " + motherboardVersion);
+        return new String[]{
+                "OEM: " + motherboardOEM,
+                "Model: " + motherboardModel,
+                "Serial: " + motherboardSerialNumber,
+                "Version: " + motherboardVersion
+        };
 
     }
 
-    public void getDisplayInfo() {
+    public String[] getDisplayInfo() {
         GraphicsDevice[] devices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+        List <String> displayData = new ArrayList<>();
 
         int refreshRate;
 
@@ -163,23 +168,20 @@ public class HardwareStuff {
             double width = (EdidUtil.getHcm(displayInfo) / cmToInchOffset);
             double height = (EdidUtil.getVcm(displayInfo) / cmToInchOffset);
 
-            System.out.println(width);
-            System.out.println(height);
 
             monitorReleaseDate = "Manufactured week " + EdidUtil.getWeek(displayInfo) + " of " + EdidUtil.getYear(displayInfo);
             physicalDimensions = Math.round(width) + "x" + Math.round(height);
             manufacturer = EdidUtil.getManufacturerID(displayInfo);
             productID = EdidUtil.getProductID(displayInfo);
 
-            screenSize = (String.format("%.2f", Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))));
+            screenSize = (format("%.2f", Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))));
 
-            System.out.println("-------------------------------------------------------------");
 
-            System.out.println("Release date: " + monitorReleaseDate);
-            System.out.println("Resolution: " + physicalDimensions);
-            System.out.println("Manufacturer: " + manufacturer);
-            System.out.println("productID: " + productID);
-            System.out.println("Screen size: " + screenSize);
+            displayData.add("Release date: " + monitorReleaseDate);
+            displayData.add("Resolution: " + physicalDimensions);
+            displayData.add("Manufacturer: " + manufacturer);
+            displayData.add("productID: " + productID);
+            displayData.add("Screen size: " + screenSize);
 
 
         }
@@ -191,19 +193,21 @@ public class HardwareStuff {
                 int widthResolution = device.getDisplayMode().getWidth();
                 String resolution = heightResolution + "x" + widthResolution;
 
-                System.out.println("Resolution: " + resolution);
-                System.out.println("Refresh rate: " + refreshRate +"hz");
+                displayData.add("Resolution: " + resolution);
+                displayData.add("Refresh rate: " + refreshRate +"hz");
 
             }
         }
 
-
+        return displayData.toArray(new String[0]);
     }
 
-    public void getStorageInfo() {
+    public String[] getStorageInfo() {
         List <HWDiskStore> drives = hardware.getDiskStores();
 
         List <OSFileStore> fileStorage = system.getOperatingSystem().getFileSystem().getFileStores();
+
+        List <String> storageData = new ArrayList<>();
 
         List <HWPartition> partitions;
 
@@ -224,14 +228,13 @@ public class HardwareStuff {
             writes = drive.getWriteBytes();
 
 
-            System.out.println("-------------------------------------------------------------");
-            System.out.println("DriveName: " + driveName);
-            System.out.println("DriveModel: " + driveModel);
-            System.out.println("Drive Serial: " + driveSerial);
-            System.out.println("Partitions: " + partitions);
-            System.out.println("Drive Size: " + driveSize);
-            System.out.println("Reads: " + reads);
-            System.out.println("Writes: " + writes);
+            storageData.add("DriveName: " + driveName);
+            storageData.add("DriveModel: " + driveModel);
+            storageData.add("Drive Serial: " + driveSerial);
+            storageData.add("Partitions: " + partitions);
+            storageData.add("Drive Size: " + driveSize);
+            storageData.add("Reads: " + reads);
+            storageData.add("Writes: " + writes);
 
         }
 
@@ -239,13 +242,14 @@ public class HardwareStuff {
             long usable = fs.getUsableSpace() / byteNum;
             long total = fs.getTotalSpace() / byteNum;
             double percentFree = (double) usable / total * 100;
-            System.out.format("Drive %s: %.1f%% Free%n", fs.getName(), percentFree);
+            String storageLeft = String.format("Drive %s: %.1f%% Free%n", fs.getName(), percentFree);
+            storageData.add("Storage left: "+ storageLeft);
         }
 
-
+        return storageData.toArray(new String[0]);
     }
 
-    public void getSystemInfo() {
+    public String[] getSystemInfo() {
         ComputerSystem pc = hardware.getComputerSystem();
 
         String manufacturer = pc.getManufacturer();
@@ -253,11 +257,12 @@ public class HardwareStuff {
         String serial = pc.getSerialNumber();
         String uuid = pc.getHardwareUUID();
 
-        System.out.println("-------------------------------------------------------------");
-        System.out.println("Manufacturer: " + manufacturer);
-        System.out.println("Model: " + model);
-        System.out.println("UUID: " + uuid);
-        System.out.println("Serial: " + serial);
+        return new String[]{
+                "Manufacturer: " + manufacturer,
+                "Model: " + model,
+                "UUID: " + uuid,
+                "Serial: " + serial
+        };
     }
 
 
@@ -290,7 +295,7 @@ public class HardwareStuff {
             psuCurrentCapacity = psu.getCurrentCapacity();
             currentCapacity = psu.getMaxCapacity();
             advertisedCapacity = psu.getDesignCapacity();
-            int losedCapacity =  advertisedCapacity - currentCapacity;
+            int lostCapacity =  advertisedCapacity - currentCapacity;
             int temp = (int) Math.round(psu.getTemperature());
             psuChem = psu.getChemistry();
             psuVolt = psu.getVoltage();
@@ -305,7 +310,7 @@ public class HardwareStuff {
             System.out.println("Battery Percentage: " + batteryPercentage);
             System.out.println("Psu battery left: " + psuBatteryLeft);
             System.out.println("PSU current capacity: " + psuCurrentCapacity);
-            System.out.println("Losed capacity: " + losedCapacity);
+            System.out.println("Lost capacity: " + lostCapacity);
             System.out.println("Temp: " + temp);
             System.out.println("PsuChem: " + psuChem);
             System.out.println("Psu Volt: " + psuVolt);
