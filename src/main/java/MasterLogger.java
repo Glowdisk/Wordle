@@ -107,8 +107,8 @@ public class MasterLogger {
         String psuName = (psu != null && psu.length > 2) ?
                 psu[2].replace("PsuDeviceName: ", "") : "Unknown";
 
-        String biosName = (bios != null && bios.length > 3) ?
-                bios[3].replace("Firmware description: ", "") : "Unknown";
+        String biosName = (bios != null && bios.length > 0  ) ?
+                bios[0].replace("Firmware Manufacturer: ", "") : "Unknown";
 
         String osName = (operatingSystem != null && operatingSystem.length > 11) ?
                 operatingSystem[11].replace("Full OS: ", "") : "Unknown";
