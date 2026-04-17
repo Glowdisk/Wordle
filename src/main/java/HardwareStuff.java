@@ -4,8 +4,7 @@ import oshi.software.os.OSFileStore;
 import oshi.util.EdidUtil;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -25,11 +24,6 @@ public class HardwareStuff {
 
     public String[] getCPUInfo() {
         CentralProcessor cpu = hardware.getProcessor();
-
-
-        List<UsbDevice> usbDevices = hardware.getUsbDevices(false);
-
-
         CentralProcessor.ProcessorIdentifier cpuId = cpu.getProcessorIdentifier();
 
         String cpuModel = cpuId.getModel();
@@ -64,7 +58,7 @@ public class HardwareStuff {
         String gpuName;
         String gpuVendor;
         String gpuID;
-        long vram = 0;
+        long vram;
         String versionInfo;
         String realVram;
 
@@ -100,12 +94,11 @@ public class HardwareStuff {
 
         for (PhysicalMemory stick : ram.getPhysicalMemory()) {
             realCapacity += stick.getCapacity();
-            ramMhz = stick.getClockSpeed() / 1000000;;    // Speed in Hz e.g. 3200000000 for 3200MHz
+            ramMhz = stick.getClockSpeed() / 1000000;    // Speed in Hz e.g. 3200000000 for 3200MHz
             chipBrand = stick.getManufacturer();   // e.g. "Samsung", "Micron", "Kingston"
             memoryType = stick.getMemoryType();     // e.g. "DDR4", "DDR5", "LPDDR5"
             ramPartNumber = stick.getPartNumber();     // Part number e.g. "M471A2K43CB1-CTD"// Serial number of that specific stick
             stickSlot = stick.getBankLabel();
-
         }
 
         realCapacity /=  byteNum;
@@ -120,7 +113,7 @@ public class HardwareStuff {
         ramData.add("System ram capacity: " + systemRamCapacity);
         ramData.add("Available Ram: " + availableRam);
         ramData.add("Used ram: " + usedRam);
-        ramData.add("ram MHZ: " + ramMhz);
+        ramData.add("Ram MHZ: " + ramMhz);
         ramData.add("Sticks found: " + ramAmount);
         ramData.add("Chip brand: " + chipBrand);
         ramData.add("Memory type: " + memoryType);
@@ -192,9 +185,12 @@ public class HardwareStuff {
                 int heightResolution = device.getDisplayMode().getHeight();
                 int widthResolution = device.getDisplayMode().getWidth();
                 String resolution = heightResolution + "x" + widthResolution;
+                String monitorDescription = heightResolution + "p " + refreshRate + " monitor";
 
                 displayData.add("Resolution: " + resolution);
-                displayData.add("Refresh rate: " + refreshRate +"hz");
+                displayData.add("Refresh rate: " + refreshRate + "hz");
+                displayData.add("Monitor: " + monitorDescription);
+
 
             }
         }
@@ -214,9 +210,9 @@ public class HardwareStuff {
         String driveName;
         String driveModel;
         String driveSerial;
-        long driveSize = 0;
-        long reads = 0;
-        long writes = 0;
+        long driveSize;
+        long reads;
+        long writes;
 
         for (HWDiskStore drive : drives) {
             driveName = drive.getName();
@@ -266,23 +262,24 @@ public class HardwareStuff {
     }
 
 
-    public void getPSUInfo() {
+    public String[] getPSUInfo() {
         List <PowerSource> power = hardware.getPowerSources();
+        List <String> psuData = new ArrayList<>();
 
-        int batteryPercentage = 0;
-        int currentCapacity = 0;
-        int advertisedCapacity = 0;
+        int batteryPercentage;
+        int currentCapacity;
+        int advertisedCapacity;
 
-        double remainingCapacity = 0;
-        String psuName = null;
-        String psuDeviceName = null;
-        String psuMaker = null;
-        double psuBatteryLeft = 0;
-        double psuCurrentCapacity = 0;
-        String psuChem = null;
-        double psuVolt = 0;
-        String psuMadeDate = null;
-        double wattage = 0;
+        double remainingCapacity;
+        String psuName;
+        String psuDeviceName;
+        String psuMaker;
+        double psuBatteryLeft;
+        double psuCurrentCapacity;
+        String psuChem;
+        double psuVolt;
+        String psuMadeDate;
+        double wattage;
 
 
         for (PowerSource psu: power) {
@@ -302,25 +299,26 @@ public class HardwareStuff {
             psuMadeDate = String.valueOf(psu.getManufactureDate());
             wattage = psu.getPowerUsageRate() / 1000;
 
-            System.out.println("-------------------------------------------------------------");
-            System.out.println("RemainingCapacity: " + remainingCapacity);
-            System.out.println("PSU name: " + psuName);
-            System.out.println("PsuDeviceName: " + psuDeviceName);
-            System.out.println("PsuMaker: " + psuMaker);
-            System.out.println("Battery Percentage: " + batteryPercentage);
-            System.out.println("Psu battery left: " + psuBatteryLeft);
-            System.out.println("PSU current capacity: " + psuCurrentCapacity);
-            System.out.println("Lost capacity: " + lostCapacity);
-            System.out.println("Temp: " + temp);
-            System.out.println("PsuChem: " + psuChem);
-            System.out.println("Psu Volt: " + psuVolt);
-            System.out.println("Psu release date: " + psuMadeDate);
-            System.out.println("Wattage: " + wattage);
+            psuData.add("RemainingCapacity: " + remainingCapacity);
+            psuData.add("PSU name: " + psuName);
+            psuData.add("PsuDeviceName: " + psuDeviceName);
+            psuData.add("PsuMaker: " + psuMaker);
+            psuData.add("Battery Percentage: " + batteryPercentage);
+            psuData.add("Psu battery left: " + psuBatteryLeft);
+            psuData.add("PSU current capacity: " + psuCurrentCapacity);
+            psuData.add("Lost capacity: " + lostCapacity);
+            psuData.add("Temp: " + temp);
+            psuData.add("PsuChem: " + psuChem);
+            psuData.add("Psu Volt: " + psuVolt);
+            psuData.add("Psu release date: " + psuMadeDate);
+            psuData.add("Wattage: " + wattage);
         }
+
+        return psuData.toArray(new String[0]);
 
     }
 
-    public void getBiosInfo() {
+    public String[] getBiosInfo() {
         Firmware firmware = hardware.getComputerSystem().getFirmware();
 
         String firmwareManufacturer = firmware.getManufacturer();
@@ -328,31 +326,36 @@ public class HardwareStuff {
         String firmwareVersion = firmware.getVersion();
         String firmwareDescription = firmware.getDescription();
         String firmwareReleaseDate = firmware.getReleaseDate();
-        System.out.println("-------------------------------------------------------------");
-        System.out.println("Firmware Manufacturer: " + firmwareManufacturer);
-        System.out.println("Firmware name: " + firmwareName);
-        System.out.println("Firmware version: " + firmwareVersion);
-        System.out.println("Firmware description: " + firmwareDescription);
-        System.out.println("Firmware release date: " + firmwareReleaseDate);
+
+        return new String[]{
+                "Firmware Manufacturer: " + firmwareManufacturer,
+                "Firmware name: " + firmwareName,
+                "Firmware version: " + firmwareVersion,
+                "Firmware description: " + firmwareDescription,
+                "Firmware release date: " + firmwareReleaseDate
+        };
     }
 
-    public void getSensorInfo() {
+    public String[] getSensorInfo() {
         Sensors sensors = hardware.getSensors();
 
         double cpuTemp = sensors.getCpuTemperature();
         double cpuVolt = sensors.getCpuVoltage();
         int[] fanSpeed = sensors.getFanSpeeds();
-        System.out.println("-------------------------------------------------------------");
 
-        System.out.println("CPU temp: " + cpuTemp);
-        System.out.println("CPu volt: " + cpuVolt);
-        System.out.println("Fan speed: " + Arrays.toString(fanSpeed));
+        return new String[]{
+                "CPU temp: " + cpuTemp,
+                "CPU volt: " + cpuVolt,
+                "Fan speed: " + Arrays.toString(fanSpeed)
+        };
     }
 
-        public void getUSBInfo() {
+        public String[] getUSBInfo() {
             List<UsbDevice> usbDevices = hardware.getUsbDevices(false);
             // Use a Map to store: <VendorID:ProductID, BestNameFound>
-            java.util.Map<String, UsbDevice> bestDevices = new java.util.HashMap<>();
+            Map<String, UsbDevice> bestDevices = new HashMap<>();
+
+            List<String> usbData = new ArrayList<>();
 
             String usbName;
             String usbVendor;
@@ -375,7 +378,7 @@ public class HardwareStuff {
                 }
             }
 
-            // Now print the "winners"
+            // Now print the main results
             for (UsbDevice usb : bestDevices.values()) {
                 usbName = usb.getName();
                 usbVendor = usb.getVendor();
@@ -386,22 +389,24 @@ public class HardwareStuff {
 
                 String deviceFingerprint = usb.getVendorId() + ":" + usb.getProductId();
 
-                System.out.println("-------------------------------------------------------------");
-                System.out.println("NAME: " + usbName);
-                System.out.println("Vendor: " + usbVendor);
-                System.out.println("VendorID: " + usbVendorId);
-                System.out.println("usbUniqueDeviceID: " + usbUniqueDeviceID);
-                System.out.println("USB product ID: " + usbProductID);
-                System.out.println("FingerPint: " + deviceFingerprint);
+                usbData.add("NAME: " + usbName);
+                usbData.add("Vendor: " + usbVendor);
+                usbData.add("VendorID: " + usbVendorId);
+                usbData.add("usbUniqueDeviceID: " + usbUniqueDeviceID);
+                usbData.add("USB product ID: " + usbProductID);
+                usbData.add("FingerPint: " + deviceFingerprint);
                 if (!usbSerialNumber.isBlank()) {
-                    System.out.println("Serial: " + usbSerialNumber);
+                    usbData.add("Serial: " + usbSerialNumber);
                 }
             }
+            return usbData.toArray(new String[0]);
     }
 
-    public void getAudioInfo() {
+    public String[] getAudioInfo() {
         List<SoundCard> cards = hardware.getSoundCards();
         List<String> repeat = new ArrayList<>();
+        List<String> audioData = new ArrayList<>();
+
 
         String soundName;
         String soundCodec;
@@ -415,11 +420,14 @@ public class HardwareStuff {
                 soundDriver = soundCard.getDriverVersion();
                 repeat.add(soundName);
 
-                System.out.println("-------------------------------------------------------------");
-                System.out.println("Sound name: " + soundName);
-                System.out.println("Sound codec: " + soundCodec);
-                System.out.println("Sound driver: " + soundDriver);
+                audioData.add("Sound name: " + soundName);
+                audioData.add("Sound codec: " + soundCodec);
+                audioData.add("Sound driver: " + soundDriver);
             }
         }
+
+        return audioData.toArray(new String[0]);
+
     }
+
 }

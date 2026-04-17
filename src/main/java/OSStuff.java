@@ -30,9 +30,8 @@ public class OSStuff {
         this.wordle = wordle;
     }
 
+    public String[] getOSInfo() {
 
-
-    public void getOSInfo() {
         osFamily = os.getFamily();
         osManufacturer = os.getManufacturer();
         version = String.valueOf(os.getVersionInfo());
@@ -44,53 +43,73 @@ public class OSStuff {
         domainName = os.getNetworkParams().getDomainName();
         hostName = os.getNetworkParams().getHostName();
 
+        String fullOS = osManufacturer + " " + osFamily + " " + version;
+
+
         int upTimeInMinutes = (int) (systemUpTime / 60);
         // Should add upTime in hours and log if upTimeInMinutes is > 60
 
-        System.out.println("-------------------------------------------------------------");
-        System.out.println("Os family: " + osFamily);
-        System.out.println("OS Manufacturer: " + osManufacturer);
-        System.out.println("Version: " + version);
-        System.out.println("SystemUpTime: " + systemUpTime);
-        System.out.println("Process Count: " + processCount);
-        System.out.println("Processor ID: " + processerId);
-        System.out.println("files stores: " + fileStores);
-        System.out.println("Dns server: " + dnsServer);
-        System.out.println("Domain name: " + domainName);
-        System.out.println("Host name" + hostName);
-        System.out.println("Up time in minutes: " + upTimeInMinutes);
+        return new String[]{
+                        "Os family: " + osFamily,
+                        "OS Manufacturer: " + osManufacturer,
+                        "Version: " + version,
+                        "SystemUpTime: " + systemUpTime,
+                        "Process Count: " + processCount,
+                        "Processor ID: " + processerId,
+                        "files stores: " + fileStores,
+                        "Dns server: " + dnsServer,
+                        "Domain name: " + domainName,
+                        "Host name" + hostName,
+                        "Up time in minutes: " + upTimeInMinutes,
+                        "Full OS: " + fullOS
+        };
     }
 
-    public void getNetworkInfo() {
+    public String[] getNetworkInfo() {
         List<NetworkIF> networks = hardware.getNetworkIFs();
         List<String> repeat = new ArrayList<>();
+        List<String> networkData = new ArrayList<>();
+
         String networkName;
 
         String macAdress;
 
         long networkSpeed;
 
+        int primaryNetworkDetector = 0;
+
         for (NetworkIF net : networks) {
             macAdress = net.getMacaddr();
 
-
-
             if (net.getIfOperStatus() == NetworkIF.IfOperStatus.UP && !net.getDisplayName().contains("Filter") &&
-                    !net.getDisplayName().contains("Packet Scheduler") && !repeat.contains(macAdress)) {
+                    !net.getDisplayName().contains("Packet Scheduler") && !repeat.contains(macAdress) &&
+                    net.getIPv4addr().length > 0) {
 
+
+
+                primaryNetworkDetector++;
                 networkName = net.getDisplayName();
                 networkSpeed = net.getSpeed() / 1000000;
 
                 repeat.add(macAdress);
 
-                System.out.println("-------------------------------------------------------------");
-                System.out.println("Network: " + networkName);
-                System.out.println("IP: " + wordle.getLocalIP());
-                System.out.println("Speed: " + (networkSpeed) + " Mbps");
-                System.out.println("MacAddress: " + macAdress);
+                String networkNameAndSpeed = networkName + "| Speed: " + networkSpeed + " Mbps" ;
+
+                String label;
+                if (primaryNetworkDetector == 1) {
+                    label = "Primary network: ";
+                } else {
+                    label = "Secondary network: ";
+                }
+
+                networkData.add("Network: " + networkName);
+                networkData.add("Speed: " + (networkSpeed) + " Mbps");
+                networkData.add("MacAddress: " + macAdress);
+                networkData.add("Primary network: " + networkNameAndSpeed);
 
             }
         }
+        return networkData.toArray(new String[0]);
     }
 
 
