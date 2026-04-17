@@ -93,7 +93,7 @@ public class OSStuff {
 
                 repeat.add(macAdress);
 
-                String networkNameAndSpeed = networkName + "| Speed: " + networkSpeed + " Mbps" ;
+                String networkNameAndSpeed = networkName + " | Speed: " + networkSpeed + " Mbps" ;
 
                 String label;
                 if (primaryNetworkDetector == 1) {

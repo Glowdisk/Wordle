@@ -109,7 +109,7 @@ public class HardwareStuff {
 
 
 
-        ramData.add("Ram size: " + realCapacity);
+        ramData.add("Ram size: " + realCapacity + "GB");
         ramData.add("System ram capacity: " + systemRamCapacity);
         ramData.add("Available Ram: " + availableRam);
         ramData.add("Used ram: " + usedRam);
@@ -185,7 +185,7 @@ public class HardwareStuff {
                 int heightResolution = device.getDisplayMode().getHeight();
                 int widthResolution = device.getDisplayMode().getWidth();
                 String resolution = heightResolution + "x" + widthResolution;
-                String monitorDescription = heightResolution + "p " + refreshRate + " monitor";
+                String monitorDescription = heightResolution + "P " + refreshRate + "hz monitor";
 
                 displayData.add("Resolution: " + resolution);
                 displayData.add("Refresh rate: " + refreshRate + "hz");
