@@ -1,4 +1,4 @@
-/*
+package play;/*
  * File: Wordle.java
  * Name: David Nguyen
  * Period: 8th (Also 2nd)
@@ -8,16 +8,14 @@
 
 import UIFiles.WordleDictionary;
 import UIFiles.WordleGWindow;
+import logging.MasterLogger;
 import oshi.SystemInfo;
 
-import java.io.IOException;
-import java.net.*;
-
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-
+import java.net.*;
 import java.nio.charset.StandardCharsets;
-
 
 
 public class Wordle
@@ -309,8 +307,6 @@ public class Wordle
     public void run()
     {
         SystemInfo system = new SystemInfo();
-        HardwareStuff hardwareStuff = new HardwareStuff(system);
-        OSStuff os = new OSStuff(system, this);
         MasterLogger masterLogger = new MasterLogger(system,this);
 
         setCorrectWord(); // Runs the setCorrectWord method that you are making

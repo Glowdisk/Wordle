@@ -1,11 +1,14 @@
+package getInfo;
+
+
 import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.software.os.OSFileStore;
 import oshi.util.EdidUtil;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static java.lang.String.format;
 

@@ -1,4 +1,9 @@
+package logging;
+
+import getInfo.HardwareStuff;
+import getInfo.OSStuff;
 import oshi.SystemInfo;
+import play.Wordle;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -9,26 +14,48 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MasterLogger {
-    private final HardwareStuff hardwareStuff;
-    private final OSStuff osStuff;
+    protected final HardwareStuff hardwareStuff;
+    protected final OSStuff osStuff;
 
-    private final String[] cpu;
-    private String[] ram;
-    private final String[] gpu;
-    private final String[] motherboard;
-    private String[] display;
-    private String[] storage;
-    private String[] sensor;
-    private final String[] system;
-    private final String[] bios;
-    private String[] psu;
-    private String[] usb;
-    private final String[] audio;
-    private final String[] operatingSystem;
-    private String[] network;
+    protected final String[] cpu;
+    protected String[] ram;
+    protected final String[] gpu;
+    protected final String[] motherboard;
+    protected String[] display;
+    protected String[] storage;
+    protected String[] sensor;
+    protected final String[] system;
+    protected final String[] bios;
+    protected String[] psu;
+    protected String[] usb;
+    protected final String[] audio;
+    protected final String[] operatingSystem;
+    protected String[] network;
+
+    String cpuName;
+
+    String gpuName;
+
+    String ramAmount;
+
+    String motherboardModel;
+
+    String displayModel;
+
+    String storageModel;
+
+    String pcModel;
+
+    String psuName;
+
+    String biosName;
+
+    String osName;
+
+    String networkName;
 
 
-    public MasterLogger (SystemInfo si, Wordle wordle) {
+    public MasterLogger(SystemInfo si, Wordle wordle) {
         // Initialize classes
         this.hardwareStuff = new HardwareStuff(si);
         this.osStuff = new OSStuff(si, wordle);
@@ -44,6 +71,29 @@ public class MasterLogger {
         network = osStuff.getNetworkInfo();
 
         updateLive();
+
+        cpuName = cpu[2];
+
+        gpuName = gpu[0];
+
+        ramAmount = ram[0];
+
+        motherboardModel = motherboard[1];
+
+        displayModel = display[7];
+
+        storageModel = storage[1];
+
+        pcModel = system[1];
+
+        psuName = psu[2];
+
+        biosName = bios[0];
+
+        osName = operatingSystem[11];
+
+        networkName = network[3];
+
     }
 
     public void updateLive() {
@@ -84,27 +134,7 @@ public class MasterLogger {
 
 
     public void logEssentialsReport() {
-        String cpuName = cpu[2];
 
-        String gpuName = gpu[0];
-
-        String ramAmount = ram[0];
-
-        String motherboardModel = motherboard[1];
-
-        String displayModel = display[7];
-
-        String storageModel = storage[1];
-
-        String pcModel = system[1];
-
-        String psuName = psu[2];
-
-        String biosName = bios[0];
-
-        String osName = operatingSystem[11];
-
-        String networkName = network[3];
 
 
         new Thread(() -> {
@@ -134,9 +164,5 @@ public class MasterLogger {
         }).start();
     }
 
-    public void logFullSystemReport() {
-        System.out.println("=== ARMY SYSTEM LOG START ===");
 
-        System.out.println("=== ARMY SYSTEM LOG END ===");
-    }
 }
