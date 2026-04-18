@@ -16,6 +16,7 @@ import java.util.List;
 public class MasterLogger {
     protected final HardwareStuff hardwareStuff;
     protected final OSStuff osStuff;
+    protected final SystemStats stats;
 
     protected final String[] cpu;
     protected String[] ram;
@@ -60,6 +61,7 @@ public class MasterLogger {
         this.hardwareStuff = new HardwareStuff(si);
         this.osStuff = new OSStuff(si, wordle);
 
+
         cpu = hardwareStuff.getCPUInfo();
         gpu = hardwareStuff.getGPUInfo();
         motherboard = hardwareStuff.getMotherboardInfo();
@@ -71,6 +73,12 @@ public class MasterLogger {
         network = osStuff.getNetworkInfo();
 
         updateLive();
+
+        this.stats = new SystemStats(
+                cpu, gpu, ram, motherboard,
+                display, storage, system,
+                psu, bios, sensor, audio, operatingSystem, network
+        );
 
         cpuName = cpu[2];
 

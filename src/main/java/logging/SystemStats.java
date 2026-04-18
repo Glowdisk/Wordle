@@ -85,6 +85,17 @@ public class SystemStats {
     public String biosDescription;
     public String biosReleaseDate;
 
+    // SENSORS
+    public String cpuTemp;
+    public String cpuVolt;
+    public String fanSpeeds;
+
+    // Audio (first sound card only)
+    public String audioName;
+    public String audioCodec;
+    public String audioDriver;
+
+
     // OS
     public String osFamily;
     public String osManufacturer;
@@ -107,7 +118,7 @@ public class SystemStats {
 
     public SystemStats(String[] cpu, String[] gpu, String[] ram, String[] motherboard,
                        String[] display, String[] storage, String[] system,
-                       String[] psu, String[] bios, String[] operatingSystem, String[] network) {
+                       String[] psu, String[] bios, String[] sensor, String[] audio, String[] operatingSystem, String[] network) {
 
         // CPU
         cpuModel = cpu[0];
@@ -201,6 +212,20 @@ public class SystemStats {
         biosVersion = bios[2];
         biosDescription = bios[3];
         biosReleaseDate = bios[4];
+
+        // Sensors
+        if (sensor.length > 2) {
+            cpuTemp = sensor[0];
+            cpuVolt = sensor[1];
+            fanSpeeds = sensor[2];
+        }
+
+        // Audio
+        if (audio.length > 2) {
+            audioName = audio[0];
+            audioCodec = audio[1];
+            audioDriver = audio[2];
+        }
 
         // OS
         osFamily = operatingSystem[0];
