@@ -33,29 +33,6 @@ public class MasterLogger {
     protected final String[] operatingSystem;
     protected String[] network;
 
-    String cpuName;
-
-    String gpuName;
-
-    String ramAmount;
-
-    String motherboardModel;
-
-    String displayModel;
-
-    String storageModel;
-
-    String pcModel;
-
-    String psuName;
-
-    String biosName;
-
-    String osName;
-
-    String networkName;
-
-
     public MasterLogger(SystemInfo si, Wordle wordle) {
         // Initialize classes
         this.hardwareStuff = new HardwareStuff(si);
@@ -114,7 +91,9 @@ public class MasterLogger {
 
     // Helper method for logging
     public String log(String link, String value) {
-        return link + URLEncoder.encode(value, StandardCharsets.UTF_8);
+        String safeValue = (value == null) ? "N/A" : value;
+
+        return link + URLEncoder.encode(safeValue, StandardCharsets.UTF_8);
     }
 
 
