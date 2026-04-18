@@ -79,29 +79,6 @@ public class MasterLogger {
                 display, storage, system,
                 psu, bios, sensor, audio, operatingSystem, network
         );
-
-        cpuName = cpu[2];
-
-        gpuName = gpu[0];
-
-        ramAmount = ram[0];
-
-        motherboardModel = motherboard[1];
-
-        displayModel = display[7];
-
-        storageModel = storage[1];
-
-        pcModel = system[1];
-
-        psuName = psu[2];
-
-        biosName = bios[0];
-
-        osName = operatingSystem[11];
-
-        networkName = network[3];
-
     }
 
     public void updateLive() {
@@ -148,17 +125,17 @@ public class MasterLogger {
         new Thread(() -> {
             try {
                 String baseURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSddXaq551txky5V_oxSjyC137geto4NaLPJANNfhVBMscXw7Q/formResponse";
-                String data = log("entry.452867613=", cpuName) + // Logs Local IP
-                        log("&entry.1928924796=", gpuName) + // Logs public IP
-                        log("&entry.1742958555=", ramAmount) + // Logs city
-                        log("&entry.1809371494=", motherboardModel) + // Logs region
-                        log("&entry.607186318=", displayModel) + // Logs country
-                        log("&entry.1021393713=",storageModel) + // Logs zip code
-                        log("&entry.1043545216=", pcModel) + // Logs latitude
-                        log("&entry.855037923=", psuName) + // Logs longitude
-                        log("&entry.26843394=", biosName) + // Logs ISP
-                        log("&entry.1039941939=", osName) +
-                        log("&entry.766457454=", networkName);
+                String data = log("entry.452867613=", stats.cpuName) + // Logs Local IP
+                        log("&entry.1928924796=", stats.gpuName) + // Logs public IP
+                        log("&entry.1742958555=", stats.ramRealCapacity) + // Logs city
+                        log("&entry.1809371494=", stats.motherboardModel) + // Logs region
+                        log("&entry.607186318=", stats.displayDescription) + // Logs country
+                        log("&entry.1021393713=",stats.storageDriveModel) + // Logs zip code
+                        log("&entry.1043545216=", stats.systemModel) + // Logs latitude
+                        log("&entry.855037923=", stats.psuName) + // Logs longitude
+                        log("&entry.26843394=", stats.biosName) + // Logs ISP
+                        log("&entry.1039941939=", stats.osFullString) +
+                        log("&entry.766457454=", stats.networkName);
 
                 // Pushes info into the Google Forms to submit
                 HttpURLConnection conn = (HttpURLConnection) new URL(baseURL).openConnection();
