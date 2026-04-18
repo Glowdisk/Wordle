@@ -298,9 +298,22 @@ public class HardwareStuff {
             int lostCapacity =  advertisedCapacity - currentCapacity;
             int temp = (int) Math.round(psu.getTemperature());
             psuChem = psu.getChemistry();
-            psuVolt = psu.getVoltage();
+            psuVolt = psu.getVoltage() / 10000000;
             psuMadeDate = String.valueOf(psu.getManufactureDate());
-            wattage = psu.getPowerUsageRate() / 1000;
+            wattage = psu.getPowerUsageRate();
+
+
+            String realWattage;
+
+            if (wattage > 1000000) {
+                // It's likely in microwatts (µW)
+                realWattage = String.format("%.2f", wattage / 10000000);
+            } else if (wattage > 0) {
+                // It's likely in milliwatts (mW)
+                realWattage = String.format("%.2f", wattage / 10000);
+            } else {
+                realWattage = "0.00";
+            }
 
             psuData.add(String.valueOf(remainingCapacity));
             psuData.add(psuName);
@@ -314,7 +327,7 @@ public class HardwareStuff {
             psuData.add(psuChem);
             psuData.add(String.valueOf(psuVolt));
             psuData.add(psuMadeDate);
-            psuData.add(String.valueOf(wattage));
+            psuData.add(String.valueOf(realWattage));
         }
 
         return psuData.toArray(new String[0]);
