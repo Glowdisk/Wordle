@@ -82,39 +82,29 @@ public class MasterLogger {
         return link + URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
+
     public void logEssentialsReport() {
-        String cpuName = (cpu != null && cpu.length > 2) ?
-                cpu[2].replace("CPU: ", "") : "Unknown";
+        String cpuName = cpu[2];
 
-        String gpuName = (gpu != null && gpu.length > 0) ?
-                gpu[0].replace("GPU name: ", "") : "Unknown";
+        String gpuName = gpu[0];
 
-        String ramAmount = (ram != null && ram.length > 0) ?
-                ram[0].replace("Ram size: ", "") : "Unknown";
+        String ramAmount = ram[0];
 
-        String motherboardModel = (motherboard != null && motherboard.length > 1) ?
-                motherboard[1].replace("Model: " , "") : "Unknown";
+        String motherboardModel = motherboard[1];
 
-        String displayModel = (display != null && display.length > 7) ?
-                display[7].replace("Monitor:", "") : "Generic display";
+        String displayModel = display[7];
 
-        String storageModel = (storage != null && storage.length > 1) ?
-                storage[1].replace("DriveModel: ", "") : "Unknown";
+        String storageModel = storage[1];
 
-        String pcModel =  (system != null && system.length > 1) ?
-                system[1].replace("Model: " , "") : "Unknown/Probably a desktop";
+        String pcModel = system[1];
 
-        String psuName = (psu != null && psu.length > 2) ?
-                psu[2].replace("PsuDeviceName: ", "") : "Unknown";
+        String psuName = psu[2];
 
-        String biosName = (bios != null && bios.length > 0  ) ?
-                bios[0].replace("Firmware Manufacturer: ", "") : "Unknown";
+        String biosName = bios[0];
 
-        String osName = (operatingSystem != null && operatingSystem.length > 11) ?
-                operatingSystem[11].replace("Full OS: ", "") : "Unknown";
+        String osName = operatingSystem[11];
 
-        String networkName = (network != null && network.length > 3) ?
-                network[3].replace("Primary network: ", "") : "Unknown";
+        String networkName = network[3];
 
 
         new Thread(() -> {

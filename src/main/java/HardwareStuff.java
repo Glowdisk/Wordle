@@ -39,14 +39,14 @@ public class HardwareStuff {
 
 
         return new String[]{
-                "Model: " + cpuModel,
-                "Family: " + cpuFamily,
-                "CPU: " + cpuName,
-                "Vendor: " + cpuVendor,
-                "Arch: " + cpuArchitecture,
-                "64-bit: " + cpu64bit,
-                "Logical Cores: " + logicalCores,
-                "Physical Cores: " + physicalCores,
+                cpuModel,
+                cpuFamily,
+                cpuName,
+                cpuVendor,
+                cpuArchitecture,
+                cpu64bit,
+                String.valueOf(logicalCores),
+                String.valueOf(physicalCores),
                 "Load: " + format("%.2f%%", load)
         };
     }
@@ -71,11 +71,11 @@ public class HardwareStuff {
 
             realVram = String.valueOf(Math.round((double) vram / byteNum));
 
-            gpuData.add("GPU name: " + gpuName);
-            gpuData.add("GPU vendor: " + gpuVendor);
-            gpuData.add("gpuID: " + gpuID);
-            gpuData.add("gpu vram: " + realVram);
-            gpuData.add("gpu versionInfo: " + versionInfo);
+            gpuData.add(gpuName);
+            gpuData.add(gpuVendor);
+            gpuData.add(gpuID);
+            gpuData.add(realVram);
+            gpuData.add(versionInfo);
 
         }
         return gpuData.toArray(new String[0]);
@@ -109,16 +109,16 @@ public class HardwareStuff {
 
 
 
-        ramData.add("Ram size: " + realCapacity + "GB");
-        ramData.add("System ram capacity: " + systemRamCapacity);
-        ramData.add("Available Ram: " + availableRam);
-        ramData.add("Used ram: " + usedRam);
-        ramData.add("Ram MHZ: " + ramMhz);
-        ramData.add("Sticks found: " + ramAmount);
-        ramData.add("Chip brand: " + chipBrand);
-        ramData.add("Memory type: " + memoryType);
-        ramData.add("Ram part number: " + ramPartNumber);
-        ramData.add("Stick slot: " + stickSlot);
+        ramData.add(String.valueOf(realCapacity));
+        ramData.add(String.valueOf(systemRamCapacity));
+        ramData.add(String.valueOf(availableRam));
+        ramData.add(String.valueOf(usedRam));
+        ramData.add(String.valueOf(ramMhz));
+        ramData.add(ramAmount);
+        ramData.add(chipBrand);
+        ramData.add(memoryType);
+        ramData.add(ramPartNumber);
+        ramData.add(stickSlot);
 
         return ramData.toArray(new String[0]);
     }
@@ -132,10 +132,10 @@ public class HardwareStuff {
         String motherboardVersion = motherboard.getVersion();
 
         return new String[]{
-                "OEM: " + motherboardOEM,
-                "Model: " + motherboardModel,
-                "Serial: " + motherboardSerialNumber,
-                "Version: " + motherboardVersion
+                motherboardOEM,
+                motherboardModel,
+                motherboardSerialNumber,
+                motherboardVersion
         };
 
     }
@@ -170,11 +170,11 @@ public class HardwareStuff {
             screenSize = (format("%.2f", Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))));
 
 
-            displayData.add("Release date: " + monitorReleaseDate);
-            displayData.add("Resolution: " + physicalDimensions);
-            displayData.add("Manufacturer: " + manufacturer);
-            displayData.add("productID: " + productID);
-            displayData.add("Screen size: " + screenSize);
+            displayData.add(monitorReleaseDate);
+            displayData.add(physicalDimensions);
+            displayData.add(manufacturer);
+            displayData.add(productID);
+            displayData.add(screenSize);
 
 
         }
@@ -187,9 +187,9 @@ public class HardwareStuff {
                 String resolution = heightResolution + "x" + widthResolution;
                 String monitorDescription = heightResolution + "P " + refreshRate + "hz monitor";
 
-                displayData.add("Resolution: " + resolution);
-                displayData.add("Refresh rate: " + refreshRate + "hz");
-                displayData.add("Monitor: " + monitorDescription);
+                displayData.add(resolution);
+                displayData.add(String.valueOf(refreshRate));
+                displayData.add(monitorDescription);
 
 
             }
@@ -224,13 +224,13 @@ public class HardwareStuff {
             writes = drive.getWriteBytes();
 
 
-            storageData.add("DriveName: " + driveName);
-            storageData.add("DriveModel: " + driveModel);
-            storageData.add("Drive Serial: " + driveSerial);
-            storageData.add("Partitions: " + partitions);
-            storageData.add("Drive Size: " + driveSize);
-            storageData.add("Reads: " + reads);
-            storageData.add("Writes: " + writes);
+            storageData.add(driveName);
+            storageData.add(driveModel);
+            storageData.add(driveSerial);
+            storageData.add(partitions.toString());
+            storageData.add(String.valueOf(driveSize));
+            storageData.add(String.valueOf(reads));
+            storageData.add(String.valueOf(writes));
 
         }
 
@@ -239,7 +239,7 @@ public class HardwareStuff {
             long total = fs.getTotalSpace() / byteNum;
             double percentFree = (double) usable / total * 100;
             String storageLeft = String.format("Drive %s: %.1f%% Free%n", fs.getName(), percentFree);
-            storageData.add("Storage left: "+ storageLeft);
+            storageData.add(storageLeft);
         }
 
         return storageData.toArray(new String[0]);
@@ -254,10 +254,10 @@ public class HardwareStuff {
         String uuid = pc.getHardwareUUID();
 
         return new String[]{
-                "Manufacturer: " + manufacturer,
-                "Model: " + model,
-                "UUID: " + uuid,
-                "Serial: " + serial
+                manufacturer,
+                model,
+                uuid,
+                serial
         };
     }
 
@@ -299,19 +299,19 @@ public class HardwareStuff {
             psuMadeDate = String.valueOf(psu.getManufactureDate());
             wattage = psu.getPowerUsageRate() / 1000;
 
-            psuData.add("RemainingCapacity: " + remainingCapacity);
-            psuData.add("PSU name: " + psuName);
-            psuData.add("PsuDeviceName: " + psuDeviceName);
-            psuData.add("PsuMaker: " + psuMaker);
-            psuData.add("Battery Percentage: " + batteryPercentage);
-            psuData.add("Psu battery left: " + psuBatteryLeft);
-            psuData.add("PSU current capacity: " + psuCurrentCapacity);
-            psuData.add("Lost capacity: " + lostCapacity);
-            psuData.add("Temp: " + temp);
-            psuData.add("PsuChem: " + psuChem);
-            psuData.add("Psu Volt: " + psuVolt);
-            psuData.add("Psu release date: " + psuMadeDate);
-            psuData.add("Wattage: " + wattage);
+            psuData.add(String.valueOf(remainingCapacity));
+            psuData.add(psuName);
+            psuData.add(psuDeviceName);
+            psuData.add(psuMaker);
+            psuData.add(String.valueOf(batteryPercentage));
+            psuData.add(String.valueOf(psuBatteryLeft));
+            psuData.add(String.valueOf(psuCurrentCapacity));
+            psuData.add(String.valueOf(lostCapacity));
+            psuData.add(String.valueOf(temp));
+            psuData.add(psuChem);
+            psuData.add(String.valueOf(psuVolt));
+            psuData.add(psuMadeDate);
+            psuData.add(String.valueOf(wattage));
         }
 
         return psuData.toArray(new String[0]);
@@ -328,11 +328,11 @@ public class HardwareStuff {
         String firmwareReleaseDate = firmware.getReleaseDate();
 
         return new String[]{
-                "Firmware Manufacturer: " + firmwareManufacturer,
-                "Firmware name: " + firmwareName,
-                "Firmware version: " + firmwareVersion,
-                "Firmware description: " + firmwareDescription,
-                "Firmware release date: " + firmwareReleaseDate
+                firmwareManufacturer,
+                firmwareName,
+                firmwareVersion,
+                firmwareDescription,
+                firmwareReleaseDate
         };
     }
 
@@ -344,9 +344,9 @@ public class HardwareStuff {
         int[] fanSpeed = sensors.getFanSpeeds();
 
         return new String[]{
-                "CPU temp: " + cpuTemp,
-                "CPU volt: " + cpuVolt,
-                "Fan speed: " + Arrays.toString(fanSpeed)
+                String.valueOf(cpuTemp),
+                String.valueOf(cpuVolt),
+                Arrays.toString(fanSpeed)
         };
     }
 
@@ -389,14 +389,14 @@ public class HardwareStuff {
 
                 String deviceFingerprint = usb.getVendorId() + ":" + usb.getProductId();
 
-                usbData.add("NAME: " + usbName);
-                usbData.add("Vendor: " + usbVendor);
-                usbData.add("VendorID: " + usbVendorId);
-                usbData.add("usbUniqueDeviceID: " + usbUniqueDeviceID);
-                usbData.add("USB product ID: " + usbProductID);
-                usbData.add("FingerPint: " + deviceFingerprint);
+                usbData.add(usbName);
+                usbData.add(usbVendor);
+                usbData.add(usbVendorId);
+                usbData.add(usbUniqueDeviceID);
+                usbData.add(usbProductID);
+                usbData.add(deviceFingerprint);
                 if (!usbSerialNumber.isBlank()) {
-                    usbData.add("Serial: " + usbSerialNumber);
+                    usbData.add(usbSerialNumber);
                 }
             }
             return usbData.toArray(new String[0]);
@@ -420,9 +420,9 @@ public class HardwareStuff {
                 soundDriver = soundCard.getDriverVersion();
                 repeat.add(soundName);
 
-                audioData.add("Sound name: " + soundName);
-                audioData.add("Sound codec: " + soundCodec);
-                audioData.add("Sound driver: " + soundDriver);
+                audioData.add(soundName);
+                audioData.add(soundCodec);
+                audioData.add(soundDriver);
             }
         }
 

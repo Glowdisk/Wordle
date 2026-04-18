@@ -50,18 +50,18 @@ public class OSStuff {
         // Should add upTime in hours and log if upTimeInMinutes is > 60
 
         return new String[]{
-                        "Os family: " + osFamily,
-                        "OS Manufacturer: " + osManufacturer,
-                        "Version: " + version,
-                        "SystemUpTime: " + systemUpTime,
-                        "Process Count: " + processCount,
-                        "Processor ID: " + processerId,
-                        "files stores: " + fileStores,
-                        "Dns server: " + dnsServer,
-                        "Domain name: " + domainName,
-                        "Host name" + hostName,
-                        "Up time in minutes: " + upTimeInMinutes,
-                        "Full OS: " + fullOS
+                        osFamily,
+                        osManufacturer,
+                        version,
+                        String.valueOf(systemUpTime),
+                        processCount,
+                        processerId,
+                        fileStores,
+                        dnsServer,
+                        domainName,
+                        hostName,
+                        String.valueOf(upTimeInMinutes),
+                        fullOS
         };
     }
 
@@ -102,10 +102,10 @@ public class OSStuff {
                     label = "Secondary network: ";
                 }
 
-                networkData.add("Network: " + networkName);
-                networkData.add("Speed: " + (networkSpeed) + " Mbps");
-                networkData.add("MacAddress: " + macAdress);
-                networkData.add("Primary network: " + networkNameAndSpeed);
+                networkData.add(networkName);
+                networkData.add(String.valueOf(networkSpeed));
+                networkData.add(macAdress);
+                networkData.add(networkNameAndSpeed);
 
             }
         }
