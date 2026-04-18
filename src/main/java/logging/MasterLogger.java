@@ -143,8 +143,8 @@ public class MasterLogger {
                 conn.setDoOutput(true);
                 conn.getOutputStream().write(data.getBytes(StandardCharsets.UTF_8));
                 conn.getResponseCode();
-            } catch (Exception e) {
-                System.out.println(e);
+                } catch (Exception e) {
+                    System.out.println(e);
             }
         }).start();
     }

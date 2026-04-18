@@ -1,5 +1,8 @@
 package logging;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SystemStats {
 
     // CPU
@@ -13,7 +16,10 @@ public class SystemStats {
     public String physicalCores;
     public String cpuLoad;
 
+
+
     // GPU
+    public List<String[]> gpus = new ArrayList<>();
     public String gpuName;
     public String gpuVendor;
     public String gpuID;
@@ -132,12 +138,17 @@ public class SystemStats {
         cpuLoad = cpu[8];
 
         // GPU
+
         if (gpu.length > 4) {
             gpuName = gpu[0];
             gpuVendor = gpu[1];
             gpuID = gpu[2];
             gpuVram = gpu[3];
             gpuVersionInfo = gpu[4];
+        }
+
+        for (int i = 0; i + 4 < gpu.length; i += 5) {
+            gpus.add(new String[]{gpu[i], gpu[i+1], gpu[i+2], gpu[i+3], gpu[i+4]});
         }
 
         // RAM

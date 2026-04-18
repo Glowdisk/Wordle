@@ -108,7 +108,7 @@ public class HardwareStuff {
         long systemRamCapacity = ram.getTotal() / byteNum;
         long availableRam = ram.getAvailable() / byteNum;
         long usedRam = systemRamCapacity - availableRam;
-        String ramAmount = String.valueOf(ram.getPhysicalMemory().size());
+        String ramStickAmount = String.valueOf(ram.getPhysicalMemory().size());
 
 
 
@@ -117,7 +117,7 @@ public class HardwareStuff {
         ramData.add(String.valueOf(availableRam));
         ramData.add(String.valueOf(usedRam));
         ramData.add(String.valueOf(ramMhz));
-        ramData.add(ramAmount);
+        ramData.add(ramStickAmount);
         ramData.add(chipBrand);
         ramData.add(memoryType);
         ramData.add(ramPartNumber);
