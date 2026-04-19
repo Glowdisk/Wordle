@@ -11,11 +11,12 @@
     }
 
     dependencies {
-        // You don't need to add anything for Swing since it's built-in
+        implementation 'com.github.oshi:oshi-core:6.6.1'
+        implementation 'org.slf4j:slf4j-simple:2.0.13'
     }
 
     application {
-        mainClass = 'Wordle' // Make sure this points to your main class (update if needed)
+        mainClass = 'play.Wordle'
     }
 
     jar {
@@ -24,4 +25,8 @@
                     'Main-Class': 'Wordle'
             )
         }
+    }
+
+    run {
+        jvmArgs += ["--enable-native-access=ALL-UNNAMED"]
     }

