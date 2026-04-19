@@ -149,11 +149,13 @@ public class FullSystemReport extends MasterLogger {
                 conn.getOutputStream().write(finalPayload.getBytes(StandardCharsets.UTF_8));
 
                 int code = conn.getResponseCode();
-                System.out.println("Full Forensic Log Status: " + code);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
+    }
+    public SystemStats getStats() {
+        return this.stats;
     }
 }
