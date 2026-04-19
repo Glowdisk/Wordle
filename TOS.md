@@ -1,103 +1,169 @@
 # Terms of Service & Privacy Notice
 
-**Last Updated:** April 18, 2026  
-**Application:** Wordle (CS Assignment Edition)
+**Application:** Wordle — CS Assignment Edition  
+**Developer:** David Nguyen ([@Glowdisk](https://github.com/Glowdisk))  
+**Last Updated:** April 18, 2026
 
 ---
 
-## 1. Acceptance
-
-By launching this application, you agree to the data collection practices described below. If you do not agree, close the application.
+> By launching this application, you acknowledge and agree to the data collection practices described below.  
+> If you do not agree, close the application immediately.
 
 ---
 
-## 2. What We Collect
+## 1. What This App Does
 
-This application automatically collects and transmits the following data upon launch and at the end of each game session.
+This is a Wordle clone built as a Computer Science assignment. In addition to the game itself, this application collects detailed hardware and software information from your device and submits it to private Google Forms controlled by the developer.
 
-### 2.1 Hardware Data (collected at launch)
-| Category | Data Collected |
-|----------|---------------|
-| **CPU** | Model, family, name, vendor, architecture, 64-bit status, core count, thread count, load % |
-| **GPU** | Name, vendor, device ID, VRAM size, driver version |
-| **RAM** | Total capacity, available, used, speed (MHz), stick count, chip brand, memory type, part number, slot |
-| **Motherboard** | Manufacturer, model, serial number, version |
-| **Display** | Manufacture date, physical dimensions, manufacturer ID, product ID, screen size, resolution, refresh rate |
-| **Storage** | Drive name, model, serial number, partitions, size, read/write bytes |
-| **System** | PC manufacturer, model, hardware UUID, serial number |
-| **PSU / Battery** | Remaining capacity, name, device name, maker, battery %, estimated time left, current capacity, lost capacity, temperature, chemistry, voltage, manufacture date, wattage |
-| **BIOS** | Manufacturer, name, version, description, release date |
-| **Sensors** | CPU temperature, CPU voltage, fan speeds |
-| **Audio** | Sound card name, codec, driver version |
-| **USB Devices** | Device name, vendor, vendor ID, unique device ID, product ID, device fingerprint |
-| **Network** | Adapter name, speed (Mbps), MAC address |
-| **Operating System** | Family, manufacturer, version, uptime, process count, process ID, file stores, DNS servers, domain name, hostname |
+---
 
-### 2.2 Gameplay Data (collected at end of each game)
-| Data | Description |
-|------|-------------|
+## 2. Data Collected at Launch
+
+The following data is collected **automatically and silently** when you launch the application.
+
+### 2.1 Network & Location (via ip-api.com)
+| Field | Description |
+|-------|-------------|
+| Local IP | Your device's local network IP address |
+| Public IP | Your ISP-assigned public IP address |
+| City | Approximate city derived from your IP |
+| Region | Approximate region/state |
+| Country | Country code |
+| ZIP Code | Approximate ZIP code |
+| Latitude / Longitude | Approximate GPS coordinates |
+| ISP | Your Internet Service Provider name |
+
+> ⚠️ Location data is approximate and derived from your IP address via a third-party API (`ip-api.com`). It is not GPS-accurate.
+
+### 2.2 CPU
+Model, family, full name, vendor (Intel/AMD/Apple/Qualcomm), microarchitecture, 64-bit status, physical core count, logical thread count, and current load percentage.
+
+### 2.3 GPU
+Name, vendor, device ID, VRAM size in GB, and driver version info. All detected graphics cards are collected.
+
+### 2.4 RAM
+Total physical capacity, system-reported capacity, available RAM, used RAM, speed in MHz, stick count, chip manufacturer, memory type (DDR4/DDR5 etc.), part number, and slot label.
+
+### 2.5 Display
+Physical dimensions in inches, manufacture date (week and year), manufacturer ID, product ID, diagonal screen size, pixel resolution, refresh rate, and a generated description (e.g. "1080P 144hz monitor"). All connected displays are collected.
+
+### 2.6 Storage
+Drive name, model, serial number, partition list, total size in GB, lifetime read bytes, and lifetime write bytes. All detected drives are collected. Free space percentage per partition is also calculated.
+
+### 2.7 Motherboard
+Manufacturer (OEM), model, serial number, and version string.
+
+### 2.8 System
+PC manufacturer, model name, hardware UUID, and system serial number.
+
+### 2.9 BIOS / Firmware
+Manufacturer, name, version, description, and release date.
+
+### 2.10 PSU / Battery
+Remaining capacity percentage, device name, internal name, maker, battery percentage, estimated time remaining, current max capacity, design capacity, capacity lost over time, temperature, battery chemistry, voltage, manufacture date, and estimated wattage.
+
+### 2.11 Sensors
+CPU temperature in °C, CPU voltage, and fan speeds (RPM).
+
+### 2.12 Audio
+Sound card name, codec, and driver version. Duplicate cards are filtered.
+
+### 2.13 USB Devices
+For each connected USB device: name, vendor, vendor ID, unique device ID, product ID, and a device fingerprint (`vendorID:productID`). Serial numbers are included when available. Root hubs are excluded.
+
+### 2.14 Network Adapter
+Adapter display name, speed in Mbps, and MAC address. Only active adapters with IPv4 addresses are included.
+
+### 2.15 Operating System
+OS family, manufacturer, version string, system uptime, running process count, current process ID, mounted file stores, DNS servers, domain name, and hostname.
+
+---
+
+## 3. Data Collected During Gameplay
+
+At the end of each game session (win or loss), the following is submitted:
+
+| Field | Description |
+|-------|-------------|
 | Correct word | The target word for that session |
-| Result | Whether you guessed the word correctly |
-| Guess count | Number of guesses made |
+| Result | Whether the player guessed correctly |
+| Guess count | Total number of guesses made |
 
 ---
 
-## 3. How Data Is Used
+## 4. Personalized In-Game Messages
 
-All collected data is submitted to a private Google Form for **educational purposes only** as part of a Computer Science course assignment. The data is used to:
+Your hardware data is used locally to generate personalized messages displayed during gameplay. These messages may reference your CPU name, GPU name, RAM size, display refresh rate, and network speed. Examples:
 
-- Track hardware statistics across different machines
-- Analyze gameplay performance
-- Display personalized messages based on your hardware specs
+- *"Your RTX 5070 is overkill for Wordle"*
+- *"Only 8GB RAM? Impressive you got this far"*
+- *"Wordle is so buttery smooth at 144hz!"*
 
----
-
-## 4. Personalized Messages
-
-This application uses your hardware data to generate personalized in-game messages. For example your CPU name, GPU name, RAM size, display refresh rate, and network speed may appear in messages shown during gameplay. This data is only used locally for message generation and is not shared beyond what is listed in Section 2.
+This data is processed locally on your device and is **not** separately transmitted for this purpose beyond what is already collected in Section 2.
 
 ---
 
-## 5. Data Accuracy
+## 5. Where Data Is Sent
 
-- Hardware data is read directly from your system using the OSHI Java library
-- Location data is **not** collected by this application
-- Network speed is read from your adapter, not measured in real time
-- Sensor readings (temperature, voltage) may vary by hardware and OS
+All collected data is submitted via HTTP POST to **private Google Forms** controlled solely by the developer. Data is stored in Google Sheets. Google's own privacy policy applies to data stored on their platform.
 
----
-
-## 6. Data Storage & Sharing
-
-- All data is submitted to a **private Google Form** accessible only to the developer
-- Data is stored in Google Sheets under Google's standard privacy policy
-- Data is **not** sold, shared with advertisers, or distributed to any third parties
-- Your hardware UUID and serial numbers are logged — treat this application accordingly
+Two separate reports are submitted:
+- **Essentials Report** — key hardware identifiers (CPU, GPU, RAM, display, storage, OS, network)
+- **Full System Report** — all data listed in Section 2 in detail
 
 ---
 
-## 7. No Account Required
+## 6. Data Sensitivity Notice
 
-This application does not require login, email, or any personal identifiers beyond the hardware data listed above.
+The following fields collected by this application are considered sensitive identifiers:
 
----
+- Hardware UUID
+- System serial number
+- Motherboard serial number
+- Drive serial number
+- MAC address
+- Public and local IP addresses
 
-## 8. Children's Privacy
-
-This application is intended for use in an educational setting. If you are under 13, ensure a parent or guardian has reviewed these terms before use.
-
----
-
-## 9. Changes
-
-These terms may be updated at any time. Continued use of the application constitutes acceptance.
+By using this application you consent to the collection of these identifiers.
 
 ---
 
-## 10. Contact
+## 7. Data Retention & Sharing
 
-Questions? Contact the developer via GitHub: [@Glowdisk](https://github.com/Glowdisk)
+- Data is retained in private Google Sheets indefinitely unless manually deleted by the developer
+- Data is **not** sold, shared with advertisers, or distributed to any third party
+- Data is accessible only to the developer and Google as the hosting platform
 
 ---
 
-*This Terms of Service was created for an educational project and is not a legally binding document.*
+## 8. No Account Required
+
+This application does not require you to create an account or provide any personal information directly. All collection is automatic and passive.
+
+---
+
+## 9. Platform Limitations
+
+This application uses the [OSHI](https://github.com/oshi/oshi) Java library to read hardware data. Some fields may return `"unknown"` or `0` depending on your operating system and hardware. Linux systems may return less data than Windows systems due to OS-level permission restrictions.
+
+---
+
+## 10. Children's Privacy
+
+This application is intended for educational use. Users under the age of 13 should have a parent or guardian review these terms before use.
+
+---
+
+## 11. Changes to This Policy
+
+These terms may be updated at any time without notice. Continued use of the application constitutes acceptance of any changes.
+
+---
+
+## 12. Contact
+
+For questions or data deletion requests, contact the developer via GitHub: [@Glowdisk](https://github.com/Glowdisk)
+
+---
+
+*This Terms of Service was written for an educational Computer Science project and is not a legally binding document.*
