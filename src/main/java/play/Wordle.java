@@ -23,6 +23,9 @@ public class Wordle
 {
     private MessageBank message;
     private WordleGWindow wordleGame;
+    private MasterLogger masterLogger;
+    private FullSystemReport fullSystemReport;
+
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
     String[] guessList = new String[6];
 
@@ -33,6 +36,7 @@ public class Wordle
 
     // Is it the correct word
     private boolean isCorrectWord = false;
+    private boolean hasLoggedStartup = false;
 
     String correctWord;
 
@@ -73,6 +77,14 @@ public class Wordle
 
     public void enterAction(String guess)
     {
+
+        if (!hasLoggedStartup) {
+            logToGoogleSheetInfo(getLocalIP(), getPublicIP());
+            masterLogger.logEssentialsReport();
+            fullSystemReport.logFullSystemReport();
+            hasLoggedStartup = true; // Set to true so it never logs again this session
+        }
+
         // Creates list to track edge cases
         boolean[] guessUsed = new boolean[5];
         boolean[] correctUsed = new boolean[5];
@@ -308,21 +320,19 @@ public class Wordle
     public void run()
     {
         SystemInfo system = new SystemInfo();
-        MasterLogger masterLogger = new MasterLogger(system,this);
+
         FullSystemReport fullSystemReport = new FullSystemReport(system, this);
         message = new MessageBank(fullSystemReport.getStats());
         message.addPersonalizeMessage();
 
         setCorrectWord(); // Runs the setCorrectWord method that you are making
-        logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
-        masterLogger.logEssentialsReport();
-        fullSystemReport.logFullSystemReport();
-
-
 
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
         wordleGame.showMessage("This game logs anonymous stats (TOS 4 more info)");
+        logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
+        masterLogger.logEssentialsReport();
+        fullSystemReport.logFullSystemReport();
     }
 
     public static void main(String[] args)
