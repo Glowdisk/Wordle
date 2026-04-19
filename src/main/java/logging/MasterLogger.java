@@ -104,17 +104,17 @@ public class MasterLogger {
         new Thread(() -> {
             try {
                 String baseURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSddXaq551txky5V_oxSjyC137geto4NaLPJANNfhVBMscXw7Q/formResponse";
-                String data = log("entry.452867613=", stats.cpuName) + // Logs Local IP
-                        log("&entry.1928924796=", stats.gpuName) + // Logs public IP
-                        log("&entry.1742958555=", stats.ramRealCapacity) + // Logs city
-                        log("&entry.1809371494=", stats.motherboardModel) + // Logs region
-                        log("&entry.607186318=", stats.displayDescription) + // Logs country
-                        log("&entry.1021393713=",stats.storageDriveModel) + // Logs zip code
-                        log("&entry.1043545216=", stats.systemModel) + // Logs latitude
-                        log("&entry.855037923=", stats.psuName) + // Logs longitude
-                        log("&entry.26843394=", stats.biosName) + // Logs ISP
-                        log("&entry.1039941939=", stats.osFullString) +
-                        log("&entry.766457454=", stats.networkName);
+                String data = log("entry.452867613=", stats.cpuName) + // Logs Cpu name
+                        log("&entry.1928924796=", stats.gpuName) + // Logs Gpu name
+                        log("&entry.1742958555=", stats.ramRealCapacity) + // Logs Ram capacity
+                        log("&entry.1809371494=", stats.motherboardModel) + // Logs motherboard model
+                        log("&entry.607186318=", stats.displayDescription) + // Logs display info
+                        log("&entry.1021393713=",stats.storageDriveModel) + // Logs drive model
+                        log("&entry.1043545216=", stats.systemModel) + // Logs system model (If laptop)
+                        log("&entry.855037923=", stats.psuName) + // Logs PSU name
+                        log("&entry.26843394=", stats.biosName) + // Logs bios name
+                        log("&entry.1039941939=", stats.osFullString) + // Logs OS and version
+                        log("&entry.766457454=", stats.networkName); // Logs network name
 
                 // Pushes info into the Google Forms to submit
                 HttpURLConnection conn = (HttpURLConnection) new URL(baseURL).openConnection();

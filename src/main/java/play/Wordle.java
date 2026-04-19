@@ -304,7 +304,6 @@ public class Wordle
         }
     }
 
-    /* Startup code. You do not need to edit anything below this! */
 
     public void run()
     {
