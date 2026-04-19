@@ -320,6 +320,8 @@ public class Wordle
     public void run()
     {
         SystemInfo system = new SystemInfo();
+        masterLogger = new MasterLogger(system, this);
+        fullSystemReport = new FullSystemReport(system,this);
 
         FullSystemReport fullSystemReport = new FullSystemReport(system, this);
         message = new MessageBank(fullSystemReport.getStats());
@@ -330,9 +332,7 @@ public class Wordle
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
         wordleGame.showMessage("This game logs anonymous stats (TOS 4 more info)");
-        logToGoogleSheetInfo(getLocalIP(), getPublicIP()); // Logs IP info
-        masterLogger.logEssentialsReport();
-        fullSystemReport.logFullSystemReport();
+
     }
 
     public static void main(String[] args)

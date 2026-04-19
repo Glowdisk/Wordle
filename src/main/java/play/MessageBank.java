@@ -119,10 +119,10 @@ public class MessageBank {
                         stats.networkSpeed + "mbps? Get a new router for Wordle!" : "Wordle at " + stats.networkSpeed + "mbps is so fast!");
 
 
-                if (refresh > 60) {
-                    message.add("Wordle is so buttery smooth at " + refresh + "hz!");
-                }  else {
+                if (refresh < 60 && refresh > 0) {
                     message.add("Consider upgrading from a " + refresh + "hz display for a smoother Wordle!");
+                }  else {
+                    message.add("Wordle is so buttery smooth at " + refresh + "hz!");
                 }
 
 

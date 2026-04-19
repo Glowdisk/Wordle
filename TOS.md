@@ -19,7 +19,9 @@ This is a Wordle clone built as a Computer Science assignment. In addition to th
 
 ## 2. Data Collected at Launch
 
-The following data is collected **automatically and silently** when you launch the application.
+The following data is collected automatically on your first guess after launching the application
+
+When is data collected? Hardware and location data is collected the first time you submit a guess. Gameplay data (word, result, guess count) is collected at the end of each game session. The startup message "This game logs anonymous stats" is shown before any data is transmitted.
 
 ### 2.1 Network & Location (via ip-api.com)
 | Field | Description |
