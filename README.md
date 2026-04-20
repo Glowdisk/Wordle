@@ -3,4 +3,4 @@ Its the game Wordle! This is for my AP CSA class where I learn College Level Jav
 
 [Terms of Service](https://github.com/Glowdisk/Wordle/blob/main/TOS.md) (TOS)
 
-Shoutout to Joe!
+Shoutout to Eric!
