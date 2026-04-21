@@ -12,11 +12,13 @@ import logging.FullSystemReport;
 import logging.MasterLogger;
 import oshi.SystemInfo;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 
 public class Wordle
@@ -28,6 +30,13 @@ public class Wordle
 
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
     String[] guessList = new String[6];
+
+
+    private static final int missing = 0;
+    private static final int present = 1;
+    private static final int correct = 2;
+
+    private HashMap<String, Integer> keyState = new HashMap<>();
 
 
     // Current row and amount of guesses
@@ -73,7 +82,19 @@ public class Wordle
                 }
             }
         return false;
+    }
+
+    // Update key colors and make sure key colors are not being overwritten
+    private void updateKeyColor(String key, Color color, int state) {
+        key = key.toUpperCase();
+
+        int current = keyState.getOrDefault(key, -1);
+
+        if (state > current) {
+            keyState.put(key, state);
+            wordleGame.setKeyColor(key, color);
         }
+    }
 
     public void enterAction(String guess)
     {
@@ -133,7 +154,7 @@ public class Wordle
 
                 if (!correctUsed[i] && guess.charAt(i) == correctWord.charAt(i)) {
                     wordleGame.setSquareColor(currentRow, i, WordleGWindow.CORRECT_COLOR);
-                    wordleGame.setKeyColor(key, WordleGWindow.CORRECT_COLOR);
+                    updateKeyColor(key, WordleGWindow.CORRECT_COLOR, correct);
                     correctUsed[i] = true;
                     guessUsed[i] = true;
                 }
@@ -154,10 +175,10 @@ public class Wordle
 
                     if (found) {
                         wordleGame.setSquareColor(currentRow, j, WordleGWindow.PRESENT_COLOR);
-                        wordleGame.setKeyColor(key, WordleGWindow.PRESENT_COLOR);
+                        updateKeyColor(key, WordleGWindow.PRESENT_COLOR, present);
                     } else {
                         wordleGame.setSquareColor(currentRow, j, WordleGWindow.MISSING_COLOR);
-                        wordleGame.setKeyColor(key, WordleGWindow.MISSING_COLOR);
+                        updateKeyColor(key, WordleGWindow.MISSING_COLOR, missing);
                     }
                 }
 
