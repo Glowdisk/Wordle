@@ -331,7 +331,7 @@ public class Wordle
 
         wordleGame = new WordleGWindow(); // Creates GUI
         wordleGame.addEnterListener(this::enterAction); // Arrow function, learn more about how it works in the documentation
-        wordleGame.showMessage("This game logs anonymous stats (TOS 4 more info)");
+        wordleGame.showMessage("Type any word to agree to the terms of service!");
 
     }
 
