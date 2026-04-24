@@ -26,6 +26,12 @@
                     'Main-Class': 'play.Wordle'
             )
         }
+        from {
+            configurations.runtimeClasspath.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
     run {
