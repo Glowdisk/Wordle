@@ -4,6 +4,8 @@ build/
 out/
 custom-jre/
 Wordle/
+runtime/
+app/
 *.zip
 
 # Compiled class file
