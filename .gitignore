@@ -2,6 +2,9 @@
 build/
 .gradle/
 out/
+custom-jre/
+Wordle/
+*.zip
 
 # Compiled class file
 *.class
